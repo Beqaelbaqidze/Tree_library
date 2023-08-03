@@ -1,0 +1,49 @@
+.container{
+    display: flex;
+    flex-direction: column;
+}
+button{
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 15px;
+    background-color: aquamarine;
+    cursor: pointer;
+}
+.mainList{
+    cursor: pointer;
+    height: 15px;
+    width: 130px;
+    font-weight: 600px;
+}
+.mainDiv{
+    display: flex;
+    width: 420px;
+    margin-left: 50px;
+    margin-top: 10px;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.mainBtn{
+    width: 30px;
+    height: 30px;
+}
+.childDiv, .childrenDiv, .children{
+    margin-left: 50px;
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+    
+}
+.childDiv2 {
+    margin-left: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 200px;
+    justify-content: start;
+    align-items: center;
+
+}
