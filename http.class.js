@@ -1,5 +1,6 @@
 export class Http {
     #options = {
+        url: '',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -14,7 +15,7 @@ export class Http {
             this.#options = options;
         }
         return new Promise((resolve, reject) => {
-            fetch('/data.json', {
+            fetch(this.#options.url, {
                 method: this.#options.method,
                 headers: this.#options.headers
             })
