@@ -1,4 +1,5 @@
 import { Http } from "./http.class.js";
+import { mainClass } from "./main.class.js";
 
 
 const custom = {
@@ -28,12 +29,12 @@ function crt() {
     if (checker) {
         checker = false;
         const container = document.getElementById('container');
+        const vMainClass = new mainClass();
         hReq.then((value) => {
-            for (let i = 0; i < value.length; i++) {
+            vMainClass.inject('#container','TEXT',value[i]);
 
-                
-                const btnLoad = document.getElementById("btnLoad");
-                
+            for (let i = 0; i < value.length; i++) {
+                const btnLoad = document.getElementById("btnLoad");                
                 const newBtn = document.createElement("button");
                 const newUl = document.createElement('ul');
                 const div = document.createElement('div');
