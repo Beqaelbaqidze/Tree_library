@@ -9,10 +9,12 @@
         "children": [
             {
                 "id": 4,
+                "parentId" : 2,
                 "text": "Hello World 4"
             },
             {
                 "id": 5,
+                "parentId" : 2,
                 "text": "Hello World 5"
             }
         ]
