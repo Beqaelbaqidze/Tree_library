@@ -1,4 +1,3 @@
-import { Http } from "./http.class.js";
 import { mainClass } from "./main.class.js";
 
 const custom = {
@@ -9,11 +8,10 @@ const custom = {
   },
 };
 
-const http = new Http(custom);
-let hReq = http.request(custom);
+
 
 const container = document.getElementById("container");
-const vMainClass = new mainClass();
+const vMainClass = new mainClass(custom);
 hReq
   .then((value) => {
     vMainClass.inject("#container", value);

@@ -1,3 +1,5 @@
+import { HttpClass } from "./http.class.js";
+
 export class mainClass {
   htmlLITpl = (id, value, hasChildren) =>
     `<div class="node" data-id="${id}">
@@ -5,8 +7,11 @@ export class mainClass {
       ${value}
       ${hasChildren ? '<ul class="children hidden"></ul>' : ""}
     </div>`;
+  #httpClient;
 
-  constructor() {}
+  constructor(options) {
+    this.#httpClient = new HttpClass(options)
+  }
 
   inject(selector, data) {
     const assembledHTML = this.buildHTML(data);
@@ -25,7 +30,7 @@ export class mainClass {
     return vHTML;
   }
 
-  handleButtonClick(event) {
+  async handleButtonClick(event) {
     const target = event.target;
     if (
       target.classList.contains("nodebtn") &&
@@ -45,32 +50,23 @@ export class mainClass {
           },
         };
 
-        fetch(requestConfig.url, {
-          method: requestConfig.method,
-          headers: requestConfig.headers,
-        })
-          .then((response) => response.json())
-          .then((value) => {
-            const childrenData = value.filter(
-              (item) => item.parentId === parentId
+        const response = await this.#httpClient.request(requestConfig);
+        const childrenData = response.filter(
+          (item) => item.parentId === parentId
+        );
+        if (childrenData.length > 0) {
+          children.innerHTML = this.buildHTML(childrenData);
+          children.classList.remove("hidden");
+          children.classList.add("loaded");
+
+          const childNodes = children.querySelectorAll(".nodebtn.exChild");
+          childNodes.forEach((nodebtn) => {
+            nodebtn.addEventListener(
+              "click",
+              this.handleButtonClick.bind(this)
             );
-            if (childrenData.length > 0) {
-              children.innerHTML = this.buildHTML(childrenData);
-              children.classList.remove("hidden");
-              children.classList.add("loaded");
-              
-              const childNodes = children.querySelectorAll(".nodebtn.exChild");
-              childNodes.forEach((nodebtn) => {
-                nodebtn.addEventListener(
-                  "click",
-                  this.handleButtonClick.bind(this)
-                );
-              });
-            }
-          })
-          .catch((error) => {
-            console.error("Error", error);
           });
+        }
       } else {
         children.classList.toggle("hidden");
       }

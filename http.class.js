@@ -1,4 +1,4 @@
-export class Http {
+export class HttpClass {
     #options = {
         url: '',
         method: 'GET',
