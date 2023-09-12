@@ -1,21 +1,14 @@
 import { mainClass } from "./main.class.js";
 
 const custom = {
-  url: "/data.json",
+  rootElement: "#container",
+  url: "https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID=",
   method: "GET",
   headers: {
     "Content-Type": "application/json",
   },
 };
 
-
-
-const container = document.getElementById("container");
+const response = await fetch(custom.url);
+const data = await response.json();
 const vMainClass = new mainClass(custom);
-hReq
-  .then((value) => {
-    vMainClass.inject("#container", value);
-  })
-  .catch((error) => {
-    console.error("Error", error);
-  });

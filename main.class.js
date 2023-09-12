@@ -1,32 +1,51 @@
 import { HttpClass } from "./http.class.js";
 
 export class mainClass {
-  htmlLITpl = (id, value, hasChildren) =>
+  htmlULTpl = (id, value, hasChildren) =>
     `<div class="node" data-id="${id}">
-      <button class="nodebtn ${hasChildren ? "exChild" : ""}">+</button>
+      <button data-id="${id}" class="nodebtn ${
+      hasChildren ? "exChild" : ""
+    }">+</button>
       ${value}
-      ${hasChildren ? '<ul class="children hidden"></ul>' : ""}
+      <ul class="children hidden"></ul>
     </div>`;
+  htmlLITpl = (id, value) =>
+    `<li data-id="${id}">
+    <button data-id="${id}" class="nodebtn ${
+      hasChildren ? "exChild" : ""
+    }">+</button>&nbsp;${value}
+      <ul class="children hidden"></ul>
+     </li>`;
   #httpClient;
 
   constructor(options) {
-    this.#httpClient = new HttpClass(options)
+    this.#httpClient = new HttpClass(options);
+    this.#httpClient.request(options).then((data) => {
+      this.inject(options.rootElement, data);
+    });
   }
 
   inject(selector, data) {
     const assembledHTML = this.buildHTML(data);
+    if (!selector) {
+      selector = this.options.rootElement;
+    }
     document.querySelector(selector).innerHTML = assembledHTML;
-
     const container = document.querySelector(selector);
     container.addEventListener("click", this.handleButtonClick.bind(this));
   }
 
-  buildHTML(data) {
-    let vHTML = "";
+  buildHTML(data, isChildren = false) {
+    let vHTML = isChildren ? "<ul>" : "";
     for (const item of data) {
       const hasChildren = item.children && item.children.length > 0;
-      vHTML += this.htmlLITpl(item.id, item.text, hasChildren);
+      if (isChildren) {
+        vHTML += this.htmlLITpl(item.id, item.text, hasChildren);
+      } else {
+        vHTML += this.htmlULTpl(item.id, item.text, hasChildren);
+      }
     }
+    vHTML += isChildren ? "</ul>" : "";
     return vHTML;
   }
 
@@ -39,37 +58,27 @@ export class mainClass {
       event.preventDefault();
       const parent = target.closest(".node");
       const children = parent.querySelector(".children");
-      const parentId = parent.dataset.id;
 
-      if (children.classList.contains("loaded")) {
+      if (!children.classList.contains("loaded")) {
+        const parentId = parent.getAttribute("data-id");
+
         const requestConfig = {
-          url: "/data.json",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          url: `/https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID=${parentId}`,
         };
 
-        const response = await this.#httpClient.request(requestConfig);
-        const childrenData = response.filter(
-          (item) => item.parentId === parentId
-        );
-        if (childrenData.length > 0) {
-          children.innerHTML = this.buildHTML(childrenData);
-          children.classList.remove("hidden");
+        try {
+          const response = await this.#httpClient.request(requestConfig);
+          if (response.length > 0) {
+            const childrenHTML = this.buildHTML(response, true);
+            children.innerHTML = childrenHTML;
+          }
           children.classList.add("loaded");
-
-          const childNodes = children.querySelectorAll(".nodebtn.exChild");
-          childNodes.forEach((nodebtn) => {
-            nodebtn.addEventListener(
-              "click",
-              this.handleButtonClick.bind(this)
-            );
-          });
+        } catch (error) {
+          console.error(error);
         }
-      } else {
-        children.classList.toggle("hidden");
       }
+
+      children.classList.toggle("hidden");
     }
   }
 }
