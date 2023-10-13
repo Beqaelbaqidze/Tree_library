@@ -16,10 +16,7 @@ export class HttpClass {
       this.#options = options;
     }
     return new Promise((resolve, reject) => {
-      fetch(this.#options.url, {
-        method: this.#options.method,
-        headers: this.#options.headers,
-      })
+      fetch(this.#options.url)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
