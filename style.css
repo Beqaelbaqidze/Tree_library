@@ -1,5 +1,18 @@
-div{
-    margin-left: 30px;
+ul{
+    margin-left: -15px;
+    list-style-type:none;
+}
+li{
+    margin-top: 20px;
+}
+button{
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 2.5px 6px;
+    margin-right: 3px;
+    background-color: bisque;
+    border: 0.5px solid green;
+    text-align: center;
 }
 .hidden {
     display: none;
