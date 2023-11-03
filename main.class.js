@@ -9,19 +9,18 @@ export class mainClass {
     </li>`;
 
   #httpClient;
-
   constructor(options) {
+    this.options = options;
     this.#httpClient = new HttpClass();
-    this.#httpClient.request(options).then((data) => {
-      this.inject(options.rootElement, data);
+    this.#httpClient.request({ url: options.url }).then((data) => {
+      this.inject(options, data);
     });
   }
 
-  inject(selector, data) {
+  inject(options, data) {
+    const { rootElement } = options;
     const assembledHTML = this.buildHTML(data);
-    if (!selector) {
-      selector = options.rootElement;
-    }
+    const selector = rootElement || 'body';
     document.querySelector(selector).innerHTML = assembledHTML;
     const container = document.querySelector(selector);
     container.addEventListener("click", this.handleButtonClick.bind(this));
@@ -42,7 +41,6 @@ export class mainClass {
 
   async handleButtonClick(event) {
     const target = event.target;
-    console.log(target);
     if (target.classList.contains("nodebtn")) {
       event.preventDefault();
       const parent = target.closest(".node");
@@ -52,7 +50,7 @@ export class mainClass {
         const parentId = parent.getAttribute("data-id");
 
         const requestConfig = {
-          url: `http://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID=${parentId}`,
+          url: `${this.options.url}=${parentId}`,
         };
 
         try {
@@ -76,3 +74,7 @@ export class mainClass {
     }
   }
 }
+
+
+
+

@@ -32,3 +32,15 @@ export class HttpClass {
     });
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
