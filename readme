@@ -2,7 +2,7 @@
 
 // const custom = {
 //   rootElement: "#container", (html tag where you want to get it)
-//   url: "http://office..ge/JSON&PRNT_ID", (service url)
+//   url: "http://office.ge/JSON&PRNT_ID", (service url)
 //   method: "GET",
 //   headers: {
 //     "Content-Type": "application/json",
