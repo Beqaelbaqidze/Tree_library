@@ -4,7 +4,7 @@ export class HttpClass {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-    },
+    }
   };
 
   constructor(options) {

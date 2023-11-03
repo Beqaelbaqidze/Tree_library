@@ -1,20 +1,24 @@
 import { HttpClass } from "./http.class.js";
 
 export class mainClass {
-  htmlULTpl = (id, value) =>
+  htmlULTpl = (id, value, text, cdate) =>
     `<li class="node" data-id="${id}">
       <button data-id="${id}" class="nodebtn">.</button>
-      ${value}
+      ${value}, ${text}, ${cdate}
       <ul class="children hidden"></ul>
     </li>`;
 
+
   #httpClient;
   constructor(options) {
+    console.log("mainClass constructor: itemType =", options.itemType);
     this.options = options;
+    this.itemType = options.itemType;
     this.#httpClient = new HttpClass();
     this.#httpClient.request({ url: options.url }).then((data) => {
       this.inject(options, data);
     });
+    
   }
 
   inject(options, data) {
@@ -27,12 +31,12 @@ export class mainClass {
   }
 
   buildHTML(data) {
-    let vHTML = "<ul>";
+    let vHTML = "<ul>"
     for (const item of data) {
       const hasChildren = item.children && item.children.length > 0;
-      vHTML += this.htmlULTpl(item.id, item.name);
+      vHTML += this.htmlULTpl(item.id, item[this.itemType[0]], item[this.itemType[1]], item[this.itemType[2]]);
       if (hasChildren) {
-        vHTML += this.buildHTML(item.children);
+        vHTML += buildHTML(item.children);
       }
     }
     vHTML += "</ul>";
