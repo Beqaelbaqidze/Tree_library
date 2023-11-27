@@ -1,40 +1,40 @@
 import { HttpClass } from "./http.class.js";
-
 export class mainClass {
-  htmlULTpl = (id, value, text, cdate) =>
-    `<li class="node" data-id="${id}">
-      <button data-id="${id}" class="nodebtn">.</button>
-      ${value}, ${text}, ${cdate}
-      <ul class="children hidden"></ul>
+  htmlULTpl = (id, value) =>
+    `<li class="node nodeTreeLi" data-id="${id}">
+      <button data-id="${id}" class="nodebtn btnTree">+</button>
+      <p class="nodeText">${value}</p>
+      <ul class="children hidden nodeTreeUl"></ul>
     </li>`;
-
 
   #httpClient;
   constructor(options) {
-    console.log("mainClass constructor: itemType =", options.itemType);
+    console.log("mainClass constructor: itemType =", options.label);
     this.options = options;
-    this.itemType = options.itemType;
+    this.label = options.label;
     this.#httpClient = new HttpClass();
     this.#httpClient.request({ url: options.url }).then((data) => {
       this.inject(options, data);
     });
-    
   }
 
   inject(options, data) {
     const { rootElement } = options;
     const assembledHTML = this.buildHTML(data);
-    const selector = rootElement || 'body';
+    const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const container = document.querySelector(selector);
     container.addEventListener("click", this.handleButtonClick.bind(this));
   }
 
   buildHTML(data) {
-    let vHTML = "<ul>"
+    let vHTML = "<ul>";
+
     for (const item of data) {
+      const labels = this.label.map((label) => item[label]).join(", ");
       const hasChildren = item.children && item.children.length > 0;
-      vHTML += this.htmlULTpl(item.id, item[this.itemType[0]], item[this.itemType[1]], item[this.itemType[2]]);
+      vHTML += this.htmlULTpl(item.id, labels);
+
       if (hasChildren) {
         vHTML += buildHTML(item.children);
       }
@@ -52,7 +52,7 @@ export class mainClass {
 
       if (!children.classList.contains("loaded")) {
         const parentId = parent.getAttribute("data-id");
-
+        target.innerHTML = "-";
         const requestConfig = {
           url: `${this.options.url}=${parentId}`,
         };
@@ -63,12 +63,13 @@ export class mainClass {
             const childrenHTML = this.buildHTML(response);
             children.innerHTML = childrenHTML;
           } else {
-            target.innerHTML = "-";
           }
           children.classList.add("loaded");
         } catch (error) {
           console.error(error);
         }
+      } else {
+        target.innerHTML = target.innerHTML === "+" ? "-" : "+";
       }
 
       children.classList.toggle(
@@ -78,7 +79,3 @@ export class mainClass {
     }
   }
 }
-
-
-
-

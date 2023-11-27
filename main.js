@@ -7,12 +7,7 @@ const custom = {
   headers: {
     "Content-Type": "application/json",
   },
-  itemType: ["name", "creator", "createdate"]
+  label: ["name", "creator"],
 };
 
 const vMainClass = new mainClass(custom);
-
-
-
-
-

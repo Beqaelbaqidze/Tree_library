@@ -1,19 +1,48 @@
-ul{
-    margin-left: -15px;
-    list-style-type:none;
+/* style.css */
+
+/* Node styles */
+.node {
+  position: relative;
+  list-style: none;
+  margin-left: 20px; /* Adjust the indentation */
 }
-li{
-    margin-top: 20px;
+
+.nodeText {
+  font-weight: bold;
+  color: #000;
+  display: inline-block;
+  margin-right: 10px;
 }
-button{
-    cursor: pointer;
-    border-radius: 50%;
-    padding: 2.5px 6px;
-    margin-right: 3px;
-    background-color: bisque;
-    border: 0.5px solid green;
-    text-align: center;
+
+.nodebtn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
+
+.nodebtn:hover {
+  background-color: #0056b3;
+}
+
 .hidden {
-    display: none;
+  display: none;
+}
+
+/* Lines between nodes */
+.nodeTreeLi::before {
+  content: "";
+  position: absolute;
+  top: -25px;
+  left: -10px; /* Adjust the position */
+  border-left: 1px solid #000; /* Change line color here */
+  height: 100%;
+  z-index: -1;
+}
+
+/* Hide the first connector line */
+.nodeTreeLi:first-child::before {
+  display: none;
 }
