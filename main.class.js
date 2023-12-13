@@ -1,4 +1,5 @@
 import { HttpClass } from "./http.class.js";
+
 export class mainClass {
   htmlULTpl = (id, value) =>
     `<li class="node nodeTreeLi" data-id="${id}">
@@ -8,8 +9,9 @@ export class mainClass {
     </li>`;
 
   #httpClient;
+  searchedIds = [];
+
   constructor(options) {
-    console.log("mainClass constructor: itemType =", options.label);
     this.options = options;
     this.label = options.label;
     this.#httpClient = new HttpClass();
@@ -20,11 +22,16 @@ export class mainClass {
 
   inject(options, data) {
     const { rootElement } = options;
-    const assembledHTML = this.buildHTML(data);
+    const sortedData = this.sortDataByLabel(data, "name");
+    const assembledHTML = this.buildHTML(sortedData);
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const container = document.querySelector(selector);
     container.addEventListener("click", this.handleButtonClick.bind(this));
+  }
+
+  sortDataByLabel(data, labelProperty) {
+    return data.sort((a, b) => a[labelProperty] - b[labelProperty]);
   }
 
   buildHTML(data) {
@@ -36,11 +43,43 @@ export class mainClass {
       vHTML += this.htmlULTpl(item.id, labels);
 
       if (hasChildren) {
-        vHTML += buildHTML(item.children);
+        vHTML += this.buildHTML(item.children);
       }
     }
     vHTML += "</ul>";
     return vHTML;
+  }
+
+  findNodesById(id) {
+    const selector = `${this.options.rootElement || "body"} [data-id="${id}"]`;
+    return document.querySelectorAll(selector);
+  }
+
+  async search(value) {
+    try {
+      const searchInput = document.getElementById("searchInput");
+      const searchUrl = `https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.HIERARCHY.JSON&CADCODE=${value}`;
+      const response = await this.#httpClient.request({ url: searchUrl });
+
+      const matchingNodes = this.findNodesById(response.id);
+      if (matchingNodes.length > 0) {
+        const targetButton = matchingNodes[0].querySelector(".nodebtn");
+        if (targetButton) {
+          if (targetButton.innerHTML == "+") {
+            targetButton.click();
+          }
+          this.searchedIds.push(response.id);
+        } else {
+          alert(
+            `Button element not found for ID "${response.id}" in the tree.`
+          );
+        }
+      } else {
+        console.log(`No nodes matching ID "${response.id}" found in the tree.`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async handleButtonClick(event) {
@@ -63,6 +102,7 @@ export class mainClass {
             const childrenHTML = this.buildHTML(response);
             children.innerHTML = childrenHTML;
           } else {
+            // Handle case when no children are found
           }
           children.classList.add("loaded");
         } catch (error) {
@@ -77,5 +117,9 @@ export class mainClass {
         !children.classList.contains("hidden")
       );
     }
+  }
+
+  getAllSearchedIds() {
+    return this.searchedIds;
   }
 }

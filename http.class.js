@@ -4,7 +4,7 @@ export class HttpClass {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-    }
+    },
   };
 
   constructor(options) {
@@ -25,6 +25,7 @@ export class HttpClass {
         })
         .then((value) => {
           resolve(value);
+          console.log(value);
         })
         .catch((error) => {
           reject(error);
@@ -32,15 +33,3 @@ export class HttpClass {
     });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
