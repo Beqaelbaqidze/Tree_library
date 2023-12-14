@@ -1,4 +1,6 @@
+// main.js
 import { mainClass } from "./main.class.js";
+import { SearchClass } from "./search.class.js";
 
 const custom = {
   rootElement: "#container",
@@ -11,20 +13,16 @@ const custom = {
 };
 
 const vMainClass = new mainClass(custom);
+const vSearchClass = new SearchClass(vMainClass);
 
 searchInput.addEventListener("keypress", async (event) => {
   if (event.key === "Enter") {
-    const vInputValue = searchInput.value.split(".");
-    let arr = [];
-    let temp = "";
-    for (let i = 0; i < vInputValue.length; i++) {
-      temp += (temp === "" ? "" : ".") + vInputValue[i];
-      arr.push(temp);
-      for (let j = 0; j < arr.length; j++) {
-        await vMainClass.search(arr[j]);
-      }
-    }
+    const vInputValue = searchInput.value;
 
-    await handleButtonClick(event);
+    try {
+      await vSearchClass.searchAndAppendNodes(vInputValue);
+    } catch (error) {
+      console.error(error);
+    }
   }
 });

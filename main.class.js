@@ -50,37 +50,52 @@ export class mainClass {
     return vHTML;
   }
 
-  findNodesById(id) {
-    const selector = `${this.options.rootElement || "body"} [data-id="${id}"]`;
-    return document.querySelectorAll(selector);
-  }
+  // findNodesById(id) {
+  //   const selector = `${this.options.rootElement || "body"} [data-id="${id}"]`;
+  //   return document.querySelectorAll(selector);
+  // }
 
-  async search(value) {
-    try {
-      const searchInput = document.getElementById("searchInput");
-      const searchUrl = `https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.HIERARCHY.JSON&CADCODE=${value}`;
-      const response = await this.#httpClient.request({ url: searchUrl });
+  // async search(value) {
+  //   try {
+  //     const searchUrl = `https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.HIERARCHY.JSON&CADCODE=${value}`;
+  //     const response = await this.#httpClient.request({ url: searchUrl });
 
-      const matchingNodes = this.findNodesById(response.id);
-      if (matchingNodes.length > 0) {
-        const targetButton = matchingNodes[0].querySelector(".nodebtn");
-        if (targetButton) {
-          if (targetButton.innerHTML == "+") {
-            targetButton.click();
-          }
-          this.searchedIds.push(response.id);
-        } else {
-          alert(
-            `Button element not found for ID "${response.id}" in the tree.`
-          );
-        }
-      } else {
-        console.log(`No nodes matching ID "${response.id}" found in the tree.`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //     const parentIdElements = document.querySelectorAll(
+  //       "li.nodeTreeLi[data-id]"
+  //     );
+  //     const btnIdElements = document.querySelectorAll(
+  //       "button.nodebtn[data-id]"
+  //     );
+
+  //     // Assuming the response structure has nodes to be appended
+  //     for (const node of response.nodes) {
+  //       const nodeIndex = Array.from(parentIdElements).findIndex(
+  //         (element) => element.getAttribute("data-id") === node.id.toString()
+  //       );
+
+  //       if (nodeIndex !== -1) {
+  //         const parentNode = parentIdElements[nodeIndex];
+  //         const childrenElement = parentNode.querySelector(".children");
+
+  //         if (childrenElement) {
+  //           btnIdElements[nodeIndex].innerHTML = "-";
+  //         } else {
+  //           console.error("Children element not found");
+  //         }
+  //       } else {
+  //         console.log(`Parent element not found for node ID "${node.id}"`);
+  //         // Handle appending to the root container or other logic as needed
+  //         const rootContainer = document.querySelector(
+  //           this.options.rootElement || "body"
+  //         );
+  //         const nodeHTML = this.htmlULTpl(node.id, node.name);
+  //         rootContainer.insertAdjacentHTML("beforeend", `<ul>${nodeHTML}</ul>`);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
 
   async handleButtonClick(event) {
     const target = event.target;
@@ -119,7 +134,36 @@ export class mainClass {
     }
   }
 
-  getAllSearchedIds() {
-    return this.searchedIds;
-  }
+  // getAllSearchedIds() {
+  //   return this.searchedIds;
+  // }
 }
+
+// async search(value) {
+//   try {
+//     const searchInput = document.getElementById("searchInput");
+//     const searchUrl = `https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.HIERARCHY.JSON&CADCODE=${value}`;
+//     const response = await this.#httpClient.request({ url: searchUrl });
+
+//     const matchingNodes = this.findNodesById(response.id);
+//     if (matchingNodes.length > 0) {
+//       const targetButton = matchingNodes[0].querySelector(".nodebtn");
+//       const targetul= matchingNodes[0].querySelector(".children");
+//       if (targetButton) {
+//         if (targetButton.innerHTML == "+") {
+//           targetButton.innerHTML = "-"
+//         }else{
+//           //build here
+//         }
+//       } else {
+//         alert(
+//           `Button element not found for ID "${response.id}" in the tree.`
+//         );
+//       }
+//     } else {
+//       console.log(`No nodes matching ID "${response.id}" found in the tree.`);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
