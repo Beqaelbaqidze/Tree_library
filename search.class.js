@@ -10,11 +10,12 @@ export class SearchClass {
     this.#httpClient = new HttpClass();
   }
 
-  htmlULTpl = (id, value) =>
+  htmlULTpl = (id, parentId, value) =>
     `<li class="node nodeTreeLi" data-id="${id}">
-      <button data-id="${id}" class="nodebtn btnTree">+</button>
+      <button data-parent-id="${parentId}" class="parentNode btnTree">...</button>
+      <button data-id="${id}" class="btnTree rotated">></button>
       <p class="nodeText">${value}</p>
-      <ul class="children nodeTreeUl"></ul>
+      <ul class="children hidden nodeTreeUl" style="display: block"></ul>
     </li>`;
 
   findNodesById(id) {
@@ -51,6 +52,7 @@ export class SearchClass {
               });
               const nodeHTML = this.htmlULTpl(
                 response.nodes[i].id,
+                response.nodes[i].parentId,
                 labelsHTML.trim()
               );
               previousTargetUl.insertAdjacentHTML("beforeend", nodeHTML);

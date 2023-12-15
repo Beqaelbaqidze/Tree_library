@@ -3,7 +3,7 @@ import { HttpClass } from "./http.class.js";
 export class mainClass {
   htmlULTpl = (id, value) =>
     `<li class="node nodeTreeLi" data-id="${id}">
-      <button data-id="${id}" class="nodebtn btnTree">+</button>
+      <button data-id="${id}" class="nodebtn btnTree">></button>
       <p class="nodeText">${value}</p>
       <ul class="children hidden nodeTreeUl"></ul>
     </li>`;
@@ -106,7 +106,8 @@ export class mainClass {
 
       if (!children.classList.contains("loaded")) {
         const parentId = parent.getAttribute("data-id");
-        target.innerHTML = "-";
+        target.classList.toggle("rotated");
+
         const requestConfig = {
           url: `${this.options.url}=${parentId}`,
         };
@@ -116,15 +117,13 @@ export class mainClass {
           if (response.length > 0) {
             const childrenHTML = this.buildHTML(response);
             children.innerHTML = childrenHTML;
-          } else {
-            // Handle case when no children are found
           }
           children.classList.add("loaded");
         } catch (error) {
           console.error(error);
         }
       } else {
-        target.innerHTML = target.innerHTML === "+" ? "-" : "+";
+        target.classList.toggle("rotated");
       }
 
       children.classList.toggle(
