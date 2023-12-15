@@ -4,19 +4,49 @@ export class SearchClass {
   #httpClient;
   label = [];
 
-  constructor(options) {
+  constructor(options, mainInstance) {
     this.options = options;
     this.label = options.label;
     this.#httpClient = new HttpClass();
   }
 
-  htmlULTpl = (id, parentId, value) =>
-    `<li class="node nodeTreeLi" data-id="${id}">
-      <button data-parent-id="${parentId}" class="parentNode btnTree">...</button>
-      <button data-id="${id}" class="btnTree rotated">></button>
-      <p class="nodeText">${value}</p>
-      <ul class="children hidden nodeTreeUl" style="display: block"></ul>
-    </li>`;
+  htmlULTpl = (id, parentId, value) => {
+    const liElement = document.createElement("li");
+    liElement.className = "node nodeTreeLi";
+    liElement.setAttribute("data-id", id);
+
+    const parentNodeButton = document.createElement("button");
+    parentNodeButton.setAttribute("data-parent-id", parentId);
+    parentNodeButton.className = "parentNode btnTree";
+    parentNodeButton.textContent = "...";
+
+    parentNodeButton.addEventListener("click", (event) => {
+      console.log("Parent button clicked!");
+      this.searchAndClickByParentId(
+        event.target.getAttribute("data-parent-id")
+      );
+    });
+
+    const childButton = document.createElement("button");
+    childButton.setAttribute("data-id", id);
+    childButton.className = "btnTree rotated";
+    childButton.textContent = ">";
+
+    const pNode = document.createElement("p");
+    pNode.className = "nodeText";
+    pNode.textContent = value;
+
+    const ulElement = document.createElement("ul");
+    ulElement.className = "children hidden nodeTreeUl";
+    ulElement.style.display = "block";
+
+    liElement.appendChild(parentNodeButton);
+    liElement.appendChild(childButton);
+    liElement.appendChild(pNode);
+    liElement.appendChild(ulElement);
+
+    return liElement.outerHTML;
+  };
 
   findNodesById(id) {
     const selector = `[data-id="${id}"]`;
@@ -35,7 +65,8 @@ export class SearchClass {
 
         if (matchingNodes.length > 0) {
           if (targetButton) {
-            targetUl.classList.replace("hidden", "b");
+            targetUl.classList.remove("hidden");
+            targetButton.classList.add("rotated");
           }
         } else {
           if (i > 0) {
@@ -64,6 +95,41 @@ export class SearchClass {
             console.error("Previous node not found.");
           }
         }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  findNodesByParentId(parentId) {
+    const selector = `[data-parent-id="${parentId}"]`;
+    return document.querySelectorAll(selector);
+  }
+
+  // async searchAndClickByParentId(parentId) {
+  //   try {
+  //     await this.traverseAndClickByParentId(document.body, parentId);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
+  async searchAndClickByParentId(parentId) {
+    try {
+      const matchingNodes = this.findNodesByParentId(parentId);
+      if (matchingNodes.length > 0) {
+        matchingNodes.forEach((node) => {
+          const targetButton = node.querySelectorall(".nodebtn");
+          if (targetButton) {
+            targetButton.click();
+          } else {
+            console.error(
+              `Button not found in node with parent ID: ${parentId}`
+            );
+          }
+        });
+      } else {
+        console.error(`No nodes found with parent ID: ${parentId}`);
       }
     } catch (error) {
       console.error(error);
