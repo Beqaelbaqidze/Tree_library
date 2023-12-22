@@ -7,7 +7,7 @@ export class mainClass {
       <p class="nodeText">${value}</p>
       <ul class="children hidden nodeTreeUl"></ul>
     </li>`;
-
+  htmlinput = `<input type="text" class="searchinput" id="searchInput" placeholder="Search..." />`;
   #httpClient;
   searchedIds = [];
 
@@ -23,7 +23,7 @@ export class mainClass {
   inject(options, data) {
     const { rootElement } = options;
     const sortedData = this.sortDataByLabel(data, "name");
-    const assembledHTML = this.buildHTML(sortedData);
+    const assembledHTML = this.htmlinput + this.buildHTML(sortedData);
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const container = document.querySelector(selector);
@@ -33,7 +33,6 @@ export class mainClass {
   sortDataByLabel(data, labelProperty) {
     return data.sort((a, b) => a[labelProperty] - b[labelProperty]);
   }
-
   buildHTML(data) {
     let vHTML = "<ul>";
 
@@ -106,8 +105,9 @@ export class mainClass {
 
       if (!children.classList.contains("loaded")) {
         const parentId = parent.getAttribute("data-id");
-        target.classList.toggle("rotated");
-
+        if (!target.classList.contains("rotated")) {
+          target.classList.toggle("rotated");
+        }
         const requestConfig = {
           url: `${this.options.url}=${parentId}`,
         };

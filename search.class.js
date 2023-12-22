@@ -17,19 +17,14 @@ export class SearchClass {
 
     const parentNodeButton = document.createElement("button");
     parentNodeButton.setAttribute("data-parent-id", parentId);
+
     parentNodeButton.className = "parentNode btnTree";
     parentNodeButton.textContent = "...";
 
-    parentNodeButton.addEventListener("click", (event) => {
-      console.log("Parent button clicked!");
-      this.searchAndClickByParentId(
-        event.target.getAttribute("data-parent-id")
-      );
-    });
-
     const childButton = document.createElement("button");
     childButton.setAttribute("data-id", id);
-    childButton.className = "btnTree rotated";
+    childButton.setAttribute("data-parent-id", parentId);
+    childButton.className = "btnTree nodebtn rotated";
     childButton.textContent = ">";
 
     const pNode = document.createElement("p");
@@ -81,12 +76,33 @@ export class SearchClass {
                   labelsHTML += ", ";
                 }
               });
-              const nodeHTML = this.htmlULTpl(
-                response.nodes[i].id,
-                response.nodes[i].parentId,
-                labelsHTML.trim()
-              );
-              previousTargetUl.insertAdjacentHTML("beforeend", nodeHTML);
+
+              new Promise((resolve, reject) => {
+                const nodeHTML = this.htmlULTpl(
+                  response.nodes[i].id,
+                  response.nodes[i].parentId,
+                  labelsHTML.trim()
+                );
+                previousTargetUl.insertAdjacentHTML("beforeend", nodeHTML);
+                resolve(nodeHTML);
+              }).then(() => {
+                const vParentNodeBtnEl =
+                  document.querySelectorAll(".parentNode");
+
+                vParentNodeBtnEl.forEach((element) => {
+                  element.addEventListener("click", (event) => {
+                    const parentId = event.target
+                      .closest("[data-parent-id]")
+                      .getAttribute("data-parent-id");
+                    this.searchAndClickByParentId(parentId);
+                  });
+                });
+              });
+
+              // parentNodeButton.addEventListener("click", (event) => {
+              //   console.log("Parent button clicked!");
+              // });
+
               if (targetButton) {
                 targetButton.innerHTML = "-";
               }
@@ -117,19 +133,14 @@ export class SearchClass {
   async searchAndClickByParentId(parentId) {
     try {
       const matchingNodes = this.findNodesByParentId(parentId);
-      if (matchingNodes.length > 0) {
-        matchingNodes.forEach((node) => {
-          const targetButton = node.querySelectorall(".nodebtn");
-          if (targetButton) {
-            targetButton.click();
-          } else {
-            console.error(
-              `Button not found in node with parent ID: ${parentId}`
-            );
-          }
-        });
+      console.log("matchingnodes", matchingNodes);
+      const targetButton = matchingNodes[1];
+      if (targetButton) {
+        matchingNodes[0].style.display = "none";
+
+        targetButton.click();
       } else {
-        console.error(`No nodes found with parent ID: ${parentId}`);
+        console.error(`Button not found in node with parent ID: ${parentId}`);
       }
     } catch (error) {
       console.error(error);

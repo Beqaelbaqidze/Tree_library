@@ -11,18 +11,35 @@ const custom = {
   },
   label: ["name", "creator"],
 };
+let vInputEl;
 
-const vMainClass = new mainClass(custom);
-const vSearchClass = new SearchClass(vMainClass);
-
-searchInput.addEventListener("keypress", async (event) => {
-  if (event.key === "Enter") {
-    const vInputValue = searchInput.value;
-
-    try {
-      await vSearchClass.searchAndAppendNodes(vInputValue);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+const vmainPromise = new Promise((resolve, _) => {
+  const vMainClass = new mainClass(custom);
+  resolve(vMainClass);
 });
+
+vmainPromise
+  .then((vMainClass) => {
+    const vSearchClass = new SearchClass(vMainClass);
+    setTimeout(() => {
+      const vInputElement = document.getElementById("searchInput");
+      vInputEl = document.querySelector(".searchinput");
+      console.log("element", vInputEl);
+      console.log("vie", vInputElement);
+
+      vInputEl.addEventListener("keypress", async (event) => {
+        if (event.key === "Enter") {
+          const vInputValue = searchInput.value;
+
+          try {
+            await vSearchClass.searchAndAppendNodes(vInputValue);
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });
+    }, 1000);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
