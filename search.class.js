@@ -25,15 +25,15 @@ export class SearchClass {
     childButton.setAttribute("data-id", id);
     childButton.setAttribute("data-parent-id", parentId);
     childButton.className = "btnTree nodebtn rotated";
-    childButton.textContent = ">";
+    childButton.textContent = "";
 
     const pNode = document.createElement("p");
     pNode.className = "nodeText";
     pNode.textContent = value;
 
     const ulElement = document.createElement("ul");
-    ulElement.className = "children hidden nodeTreeUl";
-    ulElement.style.display = "block";
+    // ulElement.style.display = "block";
+    ulElement.className = "children nodeTreeUl";
 
     liElement.appendChild(parentNodeButton);
     liElement.appendChild(childButton);
@@ -60,8 +60,24 @@ export class SearchClass {
 
         if (matchingNodes.length > 0) {
           if (targetButton) {
-            targetUl.classList.remove("hidden");
-            targetButton.classList.add("rotated");
+            targetButton.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            setTimeout(() => {
+              targetUl.classList.add("highlight");
+
+              setTimeout(() => {
+                targetUl.classList.remove("highlight");
+              }, 2000);
+
+              targetUl.classList.remove("hidden");
+              targetButton.classList.add("rotated");
+              window.scrollBy({
+                top: -30,
+                behavior: "smooth",
+              });
+            }, 500);
           }
         } else {
           if (i > 0) {
@@ -121,6 +137,10 @@ export class SearchClass {
     const selector = `[data-parent-id="${parentId}"]`;
     return document.querySelectorAll(selector);
   }
+  findNodesByDataId(parentId) {
+    const selector = `[data-id="${parentId}"]`;
+    return document.querySelectorAll(selector);
+  }
 
   // async searchAndClickByParentId(parentId) {
   //   try {
@@ -132,15 +152,18 @@ export class SearchClass {
 
   async searchAndClickByParentId(parentId) {
     try {
-      const matchingNodes = this.findNodesByParentId(parentId);
-      console.log("matchingnodes", matchingNodes);
-      const targetButton = matchingNodes[1];
-      if (targetButton) {
-        matchingNodes[0].style.display = "none";
+      const matchingNodes = this.findNodesByDataId(parentId);
 
-        targetButton.click();
+      if (matchingNodes.length > 0) {
+        const targetButton = matchingNodes[0].querySelector(".nodebtn");
+
+        if (targetButton) {
+          targetButton.click();
+        } else {
+          console.error(`Button not found in node with parent ID: ${parentId}`);
+        }
       } else {
-        console.error(`Button not found in node with parent ID: ${parentId}`);
+        console.error(`Node with ID ${parentId} not found.`);
       }
     } catch (error) {
       console.error(error);

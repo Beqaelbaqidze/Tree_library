@@ -17,6 +17,10 @@
   display: inline-block;
   margin-right: 3px;
 }
+.nodeText:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
 
 .btnTree {
   padding-right: 8px;
@@ -38,5 +42,9 @@
 }
 .rotated {
   transform: rotate(90deg);
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease-in-out;
+}
+.highlight {
+  opacity: 0.5;
+  transition: background-color 0.5s ease;
 }
