@@ -9,7 +9,10 @@ const custom = {
   headers: {
     "Content-Type": "application/json",
   },
-  label: ["name", "creator"],
+  label: ["name"],
+  icons: ["icon", "statusIcon"],
+  changeIcons: ["iconSelected"],
+  iconsUrl: "https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree",
 };
 let vInputEl;
 
