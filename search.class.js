@@ -15,46 +15,23 @@ export class SearchClass {
     this.#httpClient = new HttpClass();
   }
 
-  // htmlULTpl = (id, parentId, value) => {
-  //   const liElement = document.createElement("li");
-  //   liElement.className = "node nodeTreeLi";
-  //   liElement.setAttribute("data-id", id);
-
-  //   const parentNodeButton = document.createElement("button");
-  //   parentNodeButton.setAttribute("data-parent-id", parentId);
-
-  //   parentNodeButton.className = "parentNode btnTree";
-  //   parentNodeButton.textContent = "...";
-
-  //   const childButton = document.createElement("button");
-  //   childButton.setAttribute("data-id", id);
-  //   childButton.setAttribute("data-parent-id", parentId);
-  //   childButton.className = "btnTree nodebtn rotated";
-  //   childButton.textContent = "";
-
-  //   const pNode = document.createElement("p");
-  //   pNode.className = "nodeText";
-  //   pNode.textContent = value;
-
-  //   const ulElement = document.createElement("ul");
-  //   // ulElement.style.display = "block";
-  //   ulElement.className = "children nodeTreeUl";
-
-  //   liElement.appendChild(parentNodeButton);
-  //   liElement.appendChild(childButton);
-  //   liElement.appendChild(pNode);
-  //   liElement.appendChild(ulElement);
-
-  //   return liElement.outerHTML;
-  // };
-  htmlULTpl = (id, parentId, value, icon, changeIcons) => {
+  htmlULTpl = (id, parentId, value, icon, changeIcons, selectedClass) => {
     return `
       <li class="node nodeTreeLi" data-id="${id}">
-        <button class="parentNode btnTree" data-parent-id="${parentId}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" id="IconChangeColor"> <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" id="mainIconPathAttribute" fill="#000000"></path> <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" id="mainIconPathAttribute" fill="#000000"></path> </svg></button>
+      <div class="nodeContainer" data-id="${id}">
+        <button class="parentNode btnTree" data-parent-id="${parentId}"><svg class="treeArrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <mask id="mask0_16_397" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+          <rect width="24" height="24" fill="#D9D9D9"/>
+        </mask>
+        <g mask="url(#mask0_16_397)">
+          <path d="M12.0045 15.1538C13.0207 15.1538 13.883 14.7982 14.5913 14.0868C15.2997 13.3755 15.6538 12.5117 15.6538 11.4955C15.6538 10.4793 15.2982 9.61698 14.5868 8.90865C13.8755 8.20032 13.0117 7.84615 11.9955 7.84615C10.9792 7.84615 10.117 8.20182 9.40863 8.91317C8.7003 9.62452 8.34613 10.4883 8.34613 11.5045C8.34613 12.5207 8.7018 13.383 9.41315 14.0913C10.1245 14.7997 10.9883 15.1538 12.0045 15.1538ZM12 14.2C11.25 14.2 10.6125 13.9375 10.0875 13.4125C9.56248 12.8875 9.29998 12.25 9.29998 11.5C9.29998 10.75 9.56248 10.1125 10.0875 9.5875C10.6125 9.0625 11.25 8.8 12 8.8C12.75 8.8 13.3875 9.0625 13.9125 9.5875C14.4375 10.1125 14.7 10.75 14.7 11.5C14.7 12.25 14.4375 12.8875 13.9125 13.4125C13.3875 13.9375 12.75 14.2 12 14.2ZM12.0027 18C9.8368 18 7.8628 17.4106 6.08075 16.2317C4.29869 15.0529 2.96407 13.4756 2.0769 11.5C2.96407 9.52435 4.29777 7.94711 6.078 6.76828C7.85822 5.58943 9.8313 5 11.9972 5C14.1632 5 16.1372 5.58943 17.9192 6.76828C19.7013 7.94711 21.0359 9.52435 21.9231 11.5C21.0359 13.4756 19.7022 15.0529 17.922 16.2317C16.1417 17.4106 14.1687 18 12.0027 18ZM12 17C13.8833 17 15.6125 16.5042 17.1875 15.5125C18.7625 14.5208 19.9666 13.1833 20.8 11.5C19.9666 9.81667 18.7625 8.47917 17.1875 7.4875C15.6125 6.49583 13.8833 6 12 6C10.1166 6 8.38748 6.49583 6.81248 7.4875C5.23748 8.47917 4.03331 9.81667 3.19998 11.5C4.03331 13.1833 5.23748 14.5208 6.81248 15.5125C8.38748 16.5042 10.1166 17 12 17Z" fill="#1C1B1F"/>
+        </g>
+      </svg></button>
         <button class="btnTree nodebtn rotated" data-id="${id}" data-parent-id="${parentId}" style= "width: 0px; height: 0px; position: absolute;"></button>
         ${changeIcons}
         ${icon}
-        <p class="nodeText">${value}</p>
+        <p class="nodeText ${selectedClass}" data-id="${id}">${value}</p>
+        </div>
         <ul class="children nodeTreeUl"></ul>
       </li>
     `;
@@ -71,15 +48,6 @@ export class SearchClass {
       const response = await this.#httpClient.request({ url: searchUrl });
       document.getElementById("searchInput").style.color = "black";
 
-      // const iconsHTML = this.icons
-      //   .map(
-      //     (
-      //       icons
-      //     ) => `<svg class= "${icons}" style="width: 18px; margin-right: 8px;height: 18px;" xmlns="http://www.w3.org/2000/svg">
-      //   <image href="${this.iconsUrl}/${response.nodes[i][label]}" class="nodeIcon" style="width: 18px; height: 18px; cursor: pointer;" />
-      // </svg>`
-      //   )
-      //   .join("");
       console.log(response.id);
       if (response.id == -1) {
         document.getElementById("searchInput").style.color = "red";
@@ -92,6 +60,10 @@ export class SearchClass {
 
           if (matchingNodes.length > 0) {
             if (targetButton) {
+              const selectedElements = document.querySelectorAll(".selected");
+              selectedElements.forEach((element) => {
+                element.classList.remove("selected");
+              });
               targetButton.scrollIntoView({
                 behavior: "smooth",
                 block: "start",
@@ -101,16 +73,27 @@ export class SearchClass {
 
                 setTimeout(() => {
                   targetUl.classList.remove("highlight");
-                  targetp.classList.add("selected");
                 }, 1000);
 
                 targetUl.classList.remove("hidden");
 
                 targetButton.classList.add("rotated");
-                window.scrollBy({
-                  top: -30,
-                  behavior: "smooth",
-                });
+
+                const isSelected = targetp.classList.contains("selected");
+
+                if (isSelected) {
+                  const selectedElement = document.querySelector(".selected");
+                  const offset = selectedElement.getBoundingClientRect().top;
+                  window.scrollBy({
+                    top: offset - 30,
+                    behavior: "smooth",
+                  });
+                } else {
+                  window.scrollBy({
+                    top: -30,
+                    behavior: "smooth",
+                  });
+                }
               }, 500);
             }
           } else {
@@ -127,7 +110,7 @@ export class SearchClass {
                 </svg>`;
 
                   if (index !== this.changeIcons.length - 1) {
-                    changeIconsHTML += "";
+                    changeIconsHTML += ``;
                   }
                 });
                 let iconsHTML = "";
@@ -148,13 +131,30 @@ export class SearchClass {
                   }
                 });
 
+                let isLastNode = i === response.nodes.length - 1;
+                const selectedClass = isLastNode ? "selected" : "";
+                setTimeout(() => {
+                  if (selectedClass) {
+                    const selectedElement = document.querySelector(
+                      `.${selectedClass}`
+                    );
+                    if (selectedElement) {
+                      selectedElement.click();
+                    } else {
+                      console.error(
+                        `Element with class ${selectedClass} not found.`
+                      );
+                    }
+                  }
+                }, 1100);
                 new Promise((resolve, reject) => {
                   const nodeHTML = this.htmlULTpl(
                     response.nodes[i].id,
                     response.nodes[i].parentId,
                     labelsHTML.trim(),
                     iconsHTML.trim(),
-                    changeIconsHTML.trim()
+                    changeIconsHTML.trim(),
+                    selectedClass
                   );
                   previousTargetUl.insertAdjacentHTML("beforeend", nodeHTML);
                   resolve(nodeHTML);
@@ -198,14 +198,6 @@ export class SearchClass {
     return document.querySelectorAll(selector);
   }
 
-  // async searchAndClickByParentId(parentId) {
-  //   try {
-  //     await this.traverseAndClickByParentId(document.body, parentId);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   async searchAndClickByParentId(parentId) {
     try {
       const matchingNodes = this.findNodesByDataId(parentId);
@@ -226,3 +218,54 @@ export class SearchClass {
     }
   }
 }
+
+// htmlULTpl = (id, parentId, value) => {
+//   const liElement = document.createElement("li");
+//   liElement.className = "node nodeTreeLi";
+//   liElement.setAttribute("data-id", id);
+
+//   const parentNodeButton = document.createElement("button");
+//   parentNodeButton.setAttribute("data-parent-id", parentId);
+
+//   parentNodeButton.className = "parentNode btnTree";
+//   parentNodeButton.textContent = "...";
+
+//   const childButton = document.createElement("button");
+//   childButton.setAttribute("data-id", id);
+//   childButton.setAttribute("data-parent-id", parentId);
+//   childButton.className = "btnTree nodebtn rotated";
+//   childButton.textContent = "";
+
+//   const pNode = document.createElement("p");
+//   pNode.className = "nodeText";
+//   pNode.textContent = value;
+
+//   const ulElement = document.createElement("ul");
+//   // ulElement.style.display = "block";
+//   ulElement.className = "children nodeTreeUl";
+
+//   liElement.appendChild(parentNodeButton);
+//   liElement.appendChild(childButton);
+//   liElement.appendChild(pNode);
+//   liElement.appendChild(ulElement);
+
+//   return liElement.outerHTML;
+// };
+
+// const iconsHTML = this.icons
+//   .map(
+//     (
+//       icons
+//     ) => `<svg class= "${icons}" style="width: 18px; margin-right: 8px;height: 18px;" xmlns="http://www.w3.org/2000/svg">
+//   <image href="${this.iconsUrl}/${response.nodes[i][label]}" class="nodeIcon" style="width: 18px; height: 18px; cursor: pointer;" />
+// </svg>`
+//   )
+//   .join("");
+
+// async searchAndClickByParentId(parentId) {
+//   try {
+//     await this.traverseAndClickByParentId(document.body, parentId);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
