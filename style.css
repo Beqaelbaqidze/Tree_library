@@ -10,6 +10,9 @@ ul {
 body {
   background: #f8f8f8;
 }
+.nodeText {
+  cursor: pointer;
+}
 .container {
   margin: 32px 24px;
 }

@@ -1,20 +1,14 @@
 import { HttpClass } from "./http.class.js";
 
 export class SearchClass {
-  #httpClient;
-  label = [];
-  icon = [];
-  chIcon = [];
-
-  constructor(options) {
-    this.options = options;
-    this.label = options.label;
-    this.icons = options.icons;
-    this.changeIcons = options.changeIcons;
-    this.iconsUrl = options.iconsUrl;
-    this.#httpClient = new HttpClass();
-  }
-
+  htmlinput = `<input type="text" class="searchinput" id="searchInput" placeholder="ძებნა..." /><button class="searchBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <mask id="mask0_39_1150" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#525252"/>
+  </mask>
+  <g mask="url(#mask0_39_1150)">
+    <path d="M18 13.25L20 15.25V20C20 20.55 19.8042 21.0208 19.4125 21.4125C19.0208 21.8042 18.55 22 18 22H4C3.45 22 2.97917 21.8042 2.5875 21.4125C2.19583 21.0208 2 20.55 2 20V6C2 5.45 2.19583 4.97917 2.5875 4.5875C2.97917 4.19583 3.45 4 4 4H9.5C9.36667 4.3 9.26667 4.62083 9.2 4.9625C9.13333 5.30417 9.08333 5.65 9.05 6H4V20H18V13.25ZM19.3 8.9L22.5 12.1L21.1 13.5L17.9 10.3C17.55 10.5 17.175 10.6667 16.775 10.8C16.375 10.9333 15.95 11 15.5 11C14.25 11 13.1875 10.5625 12.3125 9.6875C11.4375 8.8125 11 7.75 11 6.5C11 5.25 11.4375 4.1875 12.3125 3.3125C13.1875 2.4375 14.25 2 15.5 2C16.75 2 17.8125 2.4375 18.6875 3.3125C19.5625 4.1875 20 5.25 20 6.5C20 6.95 19.9333 7.375 19.8 7.775C19.6667 8.175 19.5 8.55 19.3 8.9ZM15.5 9C16.2 9 16.7917 8.75833 17.275 8.275C17.7583 7.79167 18 7.2 18 6.5C18 5.8 17.7583 5.20833 17.275 4.725C16.7917 4.24167 16.2 4 15.5 4C14.8 4 14.2083 4.24167 13.725 4.725C13.2417 5.20833 13 5.8 13 6.5C13 7.2 13.2417 7.79167 13.725 8.275C14.2083 8.75833 14.8 9 15.5 9ZM4 20V6V13V12.7V20Z" fill="#F8F8F8"/>
+  </g>
+  </svg></button>`;
   htmlULTpl = (id, parentId, value, icon, changeIcons, selectedClass) => {
     return `
       <li class="node nodeTreeLi" data-id="${id}">
@@ -37,14 +31,42 @@ export class SearchClass {
     `;
   };
 
+  #httpClient;
+  // label = [];
+  // icon = [];
+  // chIcon = [];
+  url;
+
+  constructor(options) {
+    this.options = options;
+    this.label = options.label;
+    this.icons = options.icons;
+    this.changeIcons = options.changeIcons;
+    this.iconsUrl = options.iconsUrl;
+    this.#httpClient = new HttpClass();
+  }
+  inject(options) {
+    const container = document.querySelector(options.rootElement);
+    const { rootElement } = options;
+    const assembledHTML = `${this.htmlinput}`;
+    const selector = rootElement || "body";
+    container.innerHTML = assembledHTML;
+    this.url = options.url;
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.querySelector(".searchBtn");
+    searchBtn.addEventListener("click", () =>
+      this.searchAndAppendNodes(searchInput.value, this.url)
+    );
+  }
+
   findNodesById(id) {
     const selector = `[data-id="${id}"]`;
     return document.querySelectorAll(selector);
   }
 
-  async searchAndAppendNodes(value) {
+  async searchAndAppendNodes(value, vUrl) {
     try {
-      const searchUrl = `https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.HIERARCHY.JSON&CADCODE=${value}`;
+      const searchUrl = `${vUrl}${value}`;
       const response = await this.#httpClient.request({ url: searchUrl });
       document.getElementById("searchInput").style.color = "black";
 

@@ -2,16 +2,6 @@
 import { HttpClass } from "./http.class.js";
 
 export class CadTreeClass {
-  #httpClient;
-  itemPage;
-  selectedTitle; // Variable to store the selected title
-
-  constructor() {
-    this.#httpClient = new HttpClass();
-    container.addEventListener("click", this.handleContainerClick.bind(this));
-    container.addEventListener("click", this.selectTitle.bind(this));
-  }
-
   htmlTitleTpl = (id, pageName, pageTitle) => {
     return `<h4 class="pagesTitle ${pageName}" data-id="${id}" data-text="${pageName}">${pageTitle}</h4>`;
   };
@@ -19,18 +9,42 @@ export class CadTreeClass {
   htmlCardTpl = (id, pageName, pageHtml) => {
     return `<iframe class="pagesHtml none" data-text="${pageName}" data-id="${id}" src="${pageHtml}">`;
   };
+  #httpClient;
+  itemPage;
+  vUrl;
+  selectedTitle;
+  htmlPages = `<div class="titleOfPage"></div><div class="forLink"></div>`;
+  constructor() {
+    this.#httpClient = new HttpClass();
+  }
 
+  inject(options) {
+    const mainContainer = document.querySelector(options.rootElement);
+    const container = document.querySelector("#container");
+    const { rootElement } = options;
+    const assembledHTML = `${this.htmlPages}`;
+    const selector = rootElement || "body";
+    mainContainer.innerHTML = assembledHTML;
+    this.url = options.url;
+    console.log(this.url);
+    container.addEventListener("click", this.handleContainerClick.bind(this));
+    mainContainer.addEventListener("click", this.selectTitle.bind(this));
+  }
   async handleContainerClick(event) {
-    const nodeText = event.target.closest(".nodeText");
-    if (nodeText) {
-      await this.extractItemIdFromNodeText(nodeText);
+    console.log(this.url);
+    if (document.querySelector(".nodeText")) {
+      const nodeText = event.target.closest(".nodeText");
+      console.log(nodeText);
+      if (nodeText) {
+        await this.extractItemIdFromNodeText(nodeText, this.url);
+      }
     }
   }
 
-  async extractItemIdFromNodeText(nodeText) {
+  async extractItemIdFromNodeText(nodeText, vUrl) {
     const itemId = nodeText.getAttribute("data-id");
 
-    const divUrl = `http://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.RIGHT_PAGES.JSON&ID=${itemId}`;
+    const divUrl = `${vUrl}${itemId}`;
     try {
       const response = await this.#httpClient.request({ url: divUrl });
       console.log(response.pages);
@@ -67,7 +81,6 @@ export class CadTreeClass {
           apTitleOfPage.innerHTML += titleHtml;
           apforLink.innerHTML += cardHtml;
 
-          // Check if the current item's title matches the selectedTitle
           if (item.pageName === this.selectedTitle) {
             const selectedElements = document.querySelectorAll(
               `.pagesHtml[data-text="${item.pageName}"]`
@@ -116,27 +129,27 @@ export class CadTreeClass {
       this.selectedTitle = vTr;
     }
 
-    document
-      .querySelector(".containterIframe")
-      .addEventListener("contextmenu", this.openNewWindow.bind(this));
+    // document
+    //   .querySelector(".containterIframe")
+    //   .addEventListener("contextmenu", this.openNewWindow.bind(this));
   }
 
-  openNewWindow(event) {
-    event.preventDefault();
+  // openNewWindow(event) {
+  //   event.preventDefault();
 
-    const target = event.target;
-    const vTr = target.getAttribute("data-text");
+  //   const target = event.target;
+  //   const vTr = target.getAttribute("data-text");
 
-    if (target.classList.contains("pagesTitle")) {
-      console.log("selectTitle method called for data-text:", vTr);
-      const selectedElements = document.querySelectorAll(
-        `.pagesHtml[data-text="${vTr}"]`
-      );
-      const newWindow = window.open("about:blank", "_blank");
-      newWindow.document.write(
-        `<html><head><title>${vTr}</title></head><body>${selectedElements[0].innerHTML}</body></html>`
-      );
-      newWindow.document.close();
-    }
-  }
+  //   if (target.classList.contains("pagesTitle")) {
+  //     console.log("selectTitle method called for data-text:", vTr);
+  //     const selectedElements = document.querySelectorAll(
+  //       `.pagesHtml[data-text="${vTr}"]`
+  //     );
+  //     const newWindow = window.open("about:blank", "_blank");
+  //     newWindow.document.write(
+  //       `<html><head><title>${vTr}</title></head><body>${selectedElements[0].innerHTML}</body></html>`
+  //     );
+  //     newWindow.document.close();
+  //   }
+  // }
 }
