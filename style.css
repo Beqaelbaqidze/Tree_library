@@ -9,6 +9,7 @@ ul {
 
 body {
   background: #f8f8f8;
+  margin: 32px 24px;
 }
 .nodeText {
   cursor: pointer;
@@ -27,7 +28,7 @@ body {
 }
 .searchDiv {
   display: flex;
-  margin: 24px 0;
+  margin: 56px 0 0 0;
 }
 .searchinput {
   width: 100%;
@@ -65,7 +66,13 @@ body {
 .nodeTreeLi {
   margin-left: 16px;
 }
+.nodeContainerParent {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
 .nodeContainer {
+  cursor: pointer;
   display: flex;
   margin-bottom: 32px;
   align-items: center;
@@ -97,16 +104,22 @@ body {
   visibility: hidden;
 }
 .titleOfPage {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  padding-left: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: #f8f8f8;
   border-bottom: 1px solid #989898;
-  min-height: 80px;
+  height: 80px;
 }
-.titleOfPage h4 {
+.pagesTitle {
+  background-color: #fff;
+  place-self: center;
   display: flex;
-  padding: 12px 24px;
-  gap: 10px;
+  height: 40px;
+  margin-top: 20px;
+  margin-right: 20px;
+  border-radius: 8px;
   flex: 1 0 0;
   align-self: stretch;
   text-align: center;
@@ -115,7 +128,7 @@ body {
   color: #000;
   text-align: center;
   font-feature-settings: "case" on;
-  font-family: FiraGO;
+  font-family: "FiraGO";
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -131,7 +144,7 @@ body {
   border-radius: 4px;
   background: #fafafa;
   margin-bottom: 16px;
-  height: 600px;
+  height: 700px;
   padding-right: 4px;
 }
 .forLink {
@@ -145,6 +158,96 @@ body {
   width: 100%;
   height: 100%;
 }
+.slidebtn {
+  width: 56px;
+  margin-right: 12px;
+}
+/* Define styles for the context menu */
+.contextMenu {
+  position: absolute; /* Position the context menu */
+  background-color: white; /* Background color */
+  border: 1px solid #ccc; /* Border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow */
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Define styles for the context menu items */
+.contextMenu ul {
+  list-style-type: none; /* Remove bullet points */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+}
+
+.contextMenu li {
+  cursor: pointer; /* Cursor style */
+  padding: 8px 16px; /* Padding */
+}
+
+/* Define hover effect for context menu items */
+.contextMenu li:hover {
+  background-color: #f0f0f0; /* Background color on hover */
+}
+.setting-button {
+  position: absolute;
+  background-color: #007bff; /* Blue */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  top: 5px;
+  right: 30px;
+}
+
+.setting-button:hover {
+  background-color: #0056b3; /* Darker Blue */
+}
+
+.setting-button:active {
+  background-color: #004d99; /* Slightly Darker Blue */
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 @media (min-width: 768px) {
   .container {
     display: grid;
@@ -153,8 +256,7 @@ body {
   }
   .slidebtn {
     width: 56px;
-    margin-top: 24px;
-    margin-right: 54px;
+    margin-right: 12px;
   }
   .containterIframe {
     grid-area: 2/2;
@@ -187,13 +289,16 @@ body {
   }
 }
 @media (min-width: 1440px) {
-  .container {
-    margin: 0;
-    padding: 0 48px;
+  body {
     display: grid;
     grid-template-columns: 1fr 3fr;
   }
+  .container {
+    display: flex;
+    margin: 0;
+  }
   .searchDiv {
+    margin: 36px 0;
     grid-column-start: 1;
     grid-column-end: 3;
   }
@@ -201,16 +306,28 @@ body {
     display: none;
   }
   .customContainer {
+    width: 100%;
     position: relative;
-    grid-area: 2/1;
-    height: 700px;
     top: 0;
     left: 0;
     overflow-y: scroll;
-    margin-right: 32px;
+    height: 780px;
+    margin-right: 40px;
   }
   .containterIframe {
-    height: 714px;
+    grid-area: 2/2;
+  }
+  .treeArrow {
+    cursor: pointer;
+  }
+  .searchBtn {
+    cursor: pointer;
+  }
+  .arrow {
+    cursor: pointer;
+  }
+  .nodebtn {
+    cursor: pointer;
   }
 }
 .hidden {
@@ -240,7 +357,7 @@ body {
 }
 
 .selecTitle {
-  border-bottom: 2px solid #2c4cc9;
+  border: 2px solid #2c4cc9;
   transition: 0.5s;
 }
 .titleOfPage h4 {
@@ -267,263 +384,3 @@ body {
 .titleOfPage h4:focus::before {
   transform: scaleX(1); /* Scale the underline to 100% on hover or focus */
 }
-
-/* body {
-  height: 100%;
-}
-
-
-.container {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-row: 1fr 1fr;
-  background-color: #f0f0f0;
-}
-
-.node {
-  position: relative;
-  list-style: none;
-  margin-left: 25px; 
-  margin-top: 20px;
-}
-
-.arrow {
-  z-index: -1;
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-  margin-bottom: 3px;
-}
-
-.right {
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-}
-
-.nodeText {
-  padding: 2px 6px;
-  font-weight: bold;
-  color: #333; 
-  display: inline-block;
-  margin-right: 3px;
-}
-
-.nodeText:hover {
-  opacity: 0.5;
-  cursor: pointer;
-}
-
-.btnTree {
-  padding-right: 8px;
-  margin-right: 10px;
-  font-weight: 900;
-  background-color: #f0f0f0; 
-  color: #333; 
-  border: none;
-  cursor: pointer;
-  border-right: 1px black solid;
-}
-
-.nodebtn {
-  width: 20px;
-  height: 20px;
-  z-index: 1;
-  transition: 0.5s;
-}
-
-.nodebtn:hover {
-  opacity: 0.5;
-} */
-
-/* .nodeIcon {
-  filter: invert(40%);
-}
-
-.nodeIcon:hover {
-  filter: contrast(100%);
-}
-
-.searchinput {
-  width: 100%;
-  height: 100%;
-}
-
-.customContainer {
-  grid-area: 2/1;
-  margin: 12px 0px 12px 24px;
-  height: 88vh;
-  overflow-y: auto;
-  overflow-x: auto;
-  border: 1px solid #333; 
-  background-color: #f8f8f8; 
-  border-radius: 8px;
-} */
-
-/* .slidebtn {
-  padding: 5px;
-  display: none;
-}
-.searchDiv {
-  position: relative;
-  display: flex;
-  grid-column-start: 1;
-  grid-column-end: 3;
-  width: auto;
-  border: 1px solid black;
-  margin: 30px 24px;
-  height: 48px;
-}
-.searchBtn {
-  width: 60px;
-  height: 40px;
-  position: absolute;
-  right: 2%;
-  top: 5px;
-  cursor: pointer;
-}
-.wide {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  padding: 3px;
-}
-/* buttonclik*/
-/* .buttonClickedStyles .container {
-  rotate: degree;
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.buttonClickedStyles .searchDiv {
-  margin: 30px 40px;
-}
-
-.buttonClickedStyles .searchinput {
-  position: relative;
-}
-
-.buttonClickedStyles .slidebtn {
-  cursor: pointer;
-  position: absolute;
-  left: 10px;
-  top: 110px;
-  width: 25px;
-  height: 30px;
-  padding: 5px;
-  display: flex;
-}
-
-.buttonClickedStyles .containterIframe {
-  width: auto;
-  margin: 0 40px;
-  grid-column-start: 1;
-  grid-column-end: 3;
-}
-
-.buttonClickedStyles .customContainer {
-  height: 85vh;
-  left: 15px;
-  top: 100px;
-  position: absolute;
-}
-
-.buttonClickedStyles .showTree {
-  transition: 0.5s;
-  visibility: visible;
-}
-
-.buttonClickedStyles .hideTree {
-  transition: 0.2s;
-  visibility: hidden;
-}
-
-.buttonClickedStyles .nodebtn {
-  transition: 0s;
-}
-
-.buttonClickedStyles .containterIframe {
-  height: 85vh;
-} */
-/* .containterIframe {
-  display: flex;
-  flex-direction: column;
-  background-color: #f8f8f8; 
-  margin: 12px 24px;
-  height: 88vh;
-  grid-area: 2/2;
-  border: 1px solid #333; 
-  overflow: hidden;
-  overflow-y: auto;
-}
-
-.pagesTitle {
-  cursor: pointer;
-  max-width: 200px;
-  border: 1px solid grey;
-  background-color: #f3f1f1;
-  height: 28px;
-  padding: 0 8px;
-}
-
-.titleOfPage {
-  width: 100%;
-  display: flex;
-}
-
-.forLink {
-  width: 100%;
-  height: 100%;
-}
-iframe {
-  width: 100%;
-  height: 100%;
-} */
-/* @media screen and (max-width: 1024px) {
-  .container {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-  .nodebtn {
-    transition: 0;
-  }
-  .searchDiv {
-    margin: 30px 40px;
-  }
-  .searchinput {
-    position: relative;
-  }
-  .slidebtn {
-    position: absolute;
-    left: 10px;
-    top: 110px;
-    width: 25px;
-    height: 30px;
-    padding: 5px;
-    display: flex;
-  }
-  .containterIframe {
-    margin: 0 40px;
-    grid-area: 5/1;
-  }
-  .customContainer {
-    height: 85vh;
-    left: 15px;
-    top: 95px;
-    position: absolute;
-  }
-  .showTree {
-    transition: 0.5s;
-    visibility: visible;
-  }
-  .hideTree {
-    transition: 0.2s;
-    visibility: hidden;
-  }
-  .nodebtn {
-    transition: 0s;
-  }
-  .containterIframe {
-    height: 85vh;
-  }
-} */

@@ -32,8 +32,11 @@ export class CadTreeClass {
   }
   async handleContainerClick(event) {
     console.log(this.url);
-    if (document.querySelector(".nodeText")) {
-      const nodeText = event.target.closest(".nodeText");
+    if (
+      document.querySelector(".nodeText") ||
+      document.querySelector(".nodeContainer")
+    ) {
+      const nodeText = event.target.closest(".nodeContainer");
       console.log(nodeText);
       if (nodeText) {
         await this.extractItemIdFromNodeText(nodeText, this.url);
@@ -45,6 +48,7 @@ export class CadTreeClass {
     const itemId = nodeText.getAttribute("data-id");
 
     const divUrl = `${vUrl}${itemId}`;
+
     try {
       const response = await this.#httpClient.request({ url: divUrl });
       console.log(response.pages);
@@ -70,7 +74,7 @@ export class CadTreeClass {
       try {
         const promises = response.map(async (item) => {
           const pageUrlHtml = item.pageUrl;
-
+          console.log(pageUrlHtml);
           const titleHtml = this.htmlTitleTpl(
             id,
             item.pageName,

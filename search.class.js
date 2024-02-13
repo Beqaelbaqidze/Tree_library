@@ -1,7 +1,16 @@
 import { HttpClass } from "./http.class.js";
 
 export class SearchClass {
-  htmlinput = `<input type="text" class="searchinput" id="searchInput" placeholder="ძებნა..." /><button class="searchBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  htmlinput =
+    `<button class="slidebtn" id="slidebtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <mask id="mask0_39_1169" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#D9D9D9"/>
+  </mask>
+  <g mask="url(#mask0_39_1169)">
+    <path d="M15.5 20.5V17.5H11.5V7.5H8.5V10.5H2.5V3.5H8.5V6.5H15.5V3.5H21.5V10.5H15.5V7.5H12.5V16.5H15.5V13.5H21.5V20.5H15.5ZM16.5 9.5H20.5V4.5H16.5V9.5ZM16.5 19.5H20.5V14.5H16.5V19.5ZM3.5 9.5H7.5V4.5H3.5V9.5Z" fill="white"/>
+  </g>
+</svg></button>` +
+    `<input type="text" class="searchinput" id="searchInput" placeholder="ძებნა..." /><button class="searchBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
   <mask id="mask0_39_1150" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
     <rect width="24" height="24" fill="#525252"/>
   </mask>
@@ -12,8 +21,8 @@ export class SearchClass {
   htmlULTpl = (id, parentId, value, icon, changeIcons, selectedClass) => {
     return `
       <li class="node nodeTreeLi" data-id="${id}">
-      <div class="nodeContainer" data-id="${id}">
-        <button class="parentNode btnTree" data-parent-id="${parentId}"><svg class="treeArrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <div class="nodeContainerParent" data-id="${id}">
+      <button class="parentNode btnTree" data-parent-id="${parentId}"><svg class="treeArrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <mask id="mask0_16_397" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
           <rect width="24" height="24" fill="#D9D9D9"/>
         </mask>
@@ -21,10 +30,13 @@ export class SearchClass {
           <path d="M12.0045 15.1538C13.0207 15.1538 13.883 14.7982 14.5913 14.0868C15.2997 13.3755 15.6538 12.5117 15.6538 11.4955C15.6538 10.4793 15.2982 9.61698 14.5868 8.90865C13.8755 8.20032 13.0117 7.84615 11.9955 7.84615C10.9792 7.84615 10.117 8.20182 9.40863 8.91317C8.7003 9.62452 8.34613 10.4883 8.34613 11.5045C8.34613 12.5207 8.7018 13.383 9.41315 14.0913C10.1245 14.7997 10.9883 15.1538 12.0045 15.1538ZM12 14.2C11.25 14.2 10.6125 13.9375 10.0875 13.4125C9.56248 12.8875 9.29998 12.25 9.29998 11.5C9.29998 10.75 9.56248 10.1125 10.0875 9.5875C10.6125 9.0625 11.25 8.8 12 8.8C12.75 8.8 13.3875 9.0625 13.9125 9.5875C14.4375 10.1125 14.7 10.75 14.7 11.5C14.7 12.25 14.4375 12.8875 13.9125 13.4125C13.3875 13.9375 12.75 14.2 12 14.2ZM12.0027 18C9.8368 18 7.8628 17.4106 6.08075 16.2317C4.29869 15.0529 2.96407 13.4756 2.0769 11.5C2.96407 9.52435 4.29777 7.94711 6.078 6.76828C7.85822 5.58943 9.8313 5 11.9972 5C14.1632 5 16.1372 5.58943 17.9192 6.76828C19.7013 7.94711 21.0359 9.52435 21.9231 11.5C21.0359 13.4756 19.7022 15.0529 17.922 16.2317C16.1417 17.4106 14.1687 18 12.0027 18ZM12 17C13.8833 17 15.6125 16.5042 17.1875 15.5125C18.7625 14.5208 19.9666 13.1833 20.8 11.5C19.9666 9.81667 18.7625 8.47917 17.1875 7.4875C15.6125 6.49583 13.8833 6 12 6C10.1166 6 8.38748 6.49583 6.81248 7.4875C5.23748 8.47917 4.03331 9.81667 3.19998 11.5C4.03331 13.1833 5.23748 14.5208 6.81248 15.5125C8.38748 16.5042 10.1166 17 12 17Z" fill="#1C1B1F"/>
         </g>
       </svg></button>
+      <div class="nodeContainer ${selectedClass}" data-id="${id}">
+        
         <button class="btnTree nodebtn rotated" data-id="${id}" data-parent-id="${parentId}" style= "width: 0px; height: 0px; position: absolute;"></button>
         ${changeIcons}
         ${icon}
-        <p class="nodeText ${selectedClass}" data-id="${id}">${value}</p>
+        <p class="nodeText" data-id="${id}">${value}</p>
+        </div>
         </div>
         <ul class="children nodeTreeUl"></ul>
       </li>
@@ -36,6 +48,7 @@ export class SearchClass {
   // icon = [];
   // chIcon = [];
   url;
+  #searchInProgress = false;
 
   constructor(options) {
     this.options = options;
@@ -44,6 +57,7 @@ export class SearchClass {
     this.changeIcons = options.changeIcons;
     this.iconsUrl = options.iconsUrl;
     this.#httpClient = new HttpClass();
+    this.inject(options);
   }
   inject(options) {
     const container = document.querySelector(options.rootElement);
@@ -54,9 +68,15 @@ export class SearchClass {
     this.url = options.url;
     const searchInput = document.getElementById("searchInput");
     const searchBtn = document.querySelector(".searchBtn");
+    container.addEventListener("click", this.slideButton.bind(this));
     searchBtn.addEventListener("click", () =>
       this.searchAndAppendNodes(searchInput.value, this.url)
     );
+    searchInput.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        this.searchAndAppendNodes(searchInput.value, this.url);
+      }
+    });
   }
 
   findNodesById(id) {
@@ -78,7 +98,7 @@ export class SearchClass {
           const matchingNodes = this.findNodesById(response.nodes[i].id);
           const targetButton = matchingNodes[0]?.querySelector(".nodebtn");
           const targetUl = matchingNodes[0]?.querySelector(".children");
-          const targetp = matchingNodes[0]?.querySelector(".nodeText");
+          const targetp = matchingNodes[0]?.querySelector(".nodeContainer");
 
           if (matchingNodes.length > 0) {
             if (targetButton) {
@@ -237,6 +257,22 @@ export class SearchClass {
       }
     } catch (error) {
       console.error(error);
+    }
+  }
+  async slideButton(event) {
+    const target = event.target;
+    if (target.classList.contains("slidebtn")) {
+      if (
+        document
+          .querySelector(".customContainer")
+          .classList.contains("hideTree")
+      ) {
+        document.querySelector(".customContainer").classList.remove("hideTree");
+        document.querySelector(".customContainer").classList.add("showTree");
+      } else {
+        document.querySelector(".customContainer").classList.add("hideTree");
+        document.querySelector(".customContainer").classList.remove("showTree");
+      }
     }
   }
 }

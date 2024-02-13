@@ -3,15 +3,19 @@ import { HttpClass } from "./http.class.js";
 export class mainClass {
   htmlULTpl = (id, value, icons, changeIcons) => {
     return `<li class="node nodeTreeLi" data-id="${id}">
-    <div class="nodeContainer" data-id="${id}">
-      <button data-id="${id}" class="nodebtn btnTree"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="5" height="10" viewBox="0 0 5 10" fill="none">
+    <div class="nodeContainerParent" data-id="${id}">
+    <button data-id="${id}" class="nodebtn btnTree"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="5" height="10" viewBox="0 0 5 10" fill="none">
       <path d="M4.29289 5L0.5 8.79289V1.20711L4.29289 5Z" fill="#1C1B1F" stroke="black"/>
     </svg></button>
+    <div class="nodeContainer" data-id="${id}">
+      
       ${changeIcons}
       ${icons}
       <p class="nodeText" data-id="${id}">${value}</p>
       </div>
+      </div>
       <ul class="children hidden nodeTreeUl"></ul>
+      
     </li>`;
   };
 
@@ -32,16 +36,9 @@ export class mainClass {
 
   inject(options, data) {
     const { rootElement } = options;
-    const assembledHTML =
-      `<button class="slidebtn" id="slidebtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <mask id="mask0_39_1169" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-      <rect width="24" height="24" fill="#D9D9D9"/>
-    </mask>
-    <g mask="url(#mask0_39_1169)">
-      <path d="M15.5 20.5V17.5H11.5V7.5H8.5V10.5H2.5V3.5H8.5V6.5H15.5V3.5H21.5V10.5H15.5V7.5H12.5V16.5H15.5V13.5H21.5V20.5H15.5ZM16.5 9.5H20.5V4.5H16.5V9.5ZM16.5 19.5H20.5V14.5H16.5V19.5ZM3.5 9.5H7.5V4.5H3.5V9.5Z" fill="white"/>
-    </g>
-  </svg></button>` +
-      `<div class="customContainer hideTree">${this.buildHTML(data)}</div>`;
+    const assembledHTML = `<div class="customContainer hideTree">${this.buildHTML(
+      data
+    )}</div>`;
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const customContainer = document.querySelector(".customContainer");
@@ -50,10 +47,76 @@ export class mainClass {
         customContainer.classList.remove("hideTree");
       }
     }
-    const container = document.querySelector(selector);
+    // const container = document.querySelector(selector);
+    // container.addEventListener("click", this.handleButtonClick.bind(this));
+    // container.addEventListener("click", this.selectObj.bind(this));
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    const container = document.querySelector(
+      this.options.rootElement || "body"
+    );
+
     container.addEventListener("click", this.handleButtonClick.bind(this));
     container.addEventListener("click", this.selectObj.bind(this));
-    container.addEventListener("click", this.slideButton.bind(this));
+
+    const nodeContainers = document.querySelectorAll(".nodeContainer");
+    nodeContainers.forEach((container) => {
+      container.addEventListener(
+        "contextmenu",
+        this.handleContextMenu.bind(this)
+      );
+    });
+  }
+  handleContextMenu(event) {
+    const existingContextMenu = document.querySelector(".contextMenu");
+    if (existingContextMenu) {
+      document.body.removeChild(existingContextMenu);
+    }
+
+    const target = event.target.closest(".nodeContainer");
+    if (target) {
+      event.preventDefault();
+
+      const contextMenu = document.createElement("div");
+      contextMenu.classList.add("contextMenu");
+      contextMenu.innerHTML = `
+            <ul>
+                <li>Edit</li>
+                <li>Delete</li>
+            </ul>
+        `;
+
+      contextMenu.style.top = `${event.clientY}px`;
+      contextMenu.style.left = `${event.clientX}px`;
+
+      document.body.appendChild(contextMenu);
+
+      const closeContextMenu = () => {
+        document.body.removeChild(contextMenu);
+        document.removeEventListener("click", closeContextMenu);
+      };
+      document.addEventListener("click", closeContextMenu);
+
+      contextMenu.querySelectorAll("li").forEach((option) => {
+        option.addEventListener("click", () => {
+          const action = option.innerText.toLowerCase();
+          switch (action) {
+            case "edit":
+              alert("edit");
+              break;
+            case "delete":
+              alert("delete");
+              break;
+            default:
+              break;
+          }
+
+          closeContextMenu();
+        });
+      });
+    }
   }
 
   buildHTML(data) {
@@ -100,8 +163,11 @@ export class mainClass {
     const sameIcons = document.querySelectorAll(
       `.${this.icons[0]}[data-id='${vTr}']`
     );
-    if (target.classList.contains("nodeText")) {
-      const allNodeTextElements = document.querySelectorAll(".nodeText");
+    if (
+      target.classList.contains("nodeText") ||
+      target.classList.contains("nodeContainer")
+    ) {
+      const allNodeTextElements = document.querySelectorAll(".nodeContainer");
       const allChngIconElements = document.querySelectorAll(
         `.${this.changeIcons}`
       );
@@ -117,7 +183,7 @@ export class mainClass {
       });
       secondIcons.forEach((icon) => icon.classList.remove("none"));
       sameIcons.forEach((icon) => icon.classList.add("none"));
-      target.classList.add("selected");
+      target.closest(".nodeContainer").classList.add("selected");
     }
   }
 
@@ -160,22 +226,6 @@ export class mainClass {
         "hidden",
         !children.classList.contains("hidden")
       );
-    }
-  }
-  async slideButton(event) {
-    const target = event.target;
-    if (target.classList.contains("slidebtn")) {
-      if (
-        document
-          .querySelector(".customContainer")
-          .classList.contains("hideTree")
-      ) {
-        document.querySelector(".customContainer").classList.remove("hideTree");
-        document.querySelector(".customContainer").classList.add("showTree");
-      } else {
-        document.querySelector(".customContainer").classList.add("hideTree");
-        document.querySelector(".customContainer").classList.remove("showTree");
-      }
     }
   }
 }

@@ -4,14 +4,71 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <script>
+      var baseUrl = `https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree`;
+    </script>
+
+    <title>Component Of Tree</title>
   </head>
   <body>
+    <button id="openModalBtn" class="setting-button">Setting</button>
+
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>This is your modal content.</p>
+      </div>
+    </div>
     <!-- <button class="wide" id="wide">Hide Structure</button> -->
     <div class="searchDiv" id="searchContainer"></div>
     <div class="container" id="container"></div>
     <div class="containterIframe" id="containterIframe"></div>
-    <script src="main.js" type="module"></script>
-    <script src="changeInterface.js"></script>
+    <script type="module">
+      // main.js
+      import { mainClass } from "./main.class.js";
+      import { SearchClass } from "./search.class.js";
+      import { CadTreeClass } from "./cadTree.class.js";
+
+      const custom = {
+        rootElement: "#container",
+        url: baseUrl + "?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        label: ["name"],
+        icons: ["icon", "statusIcon"],
+        changeIcons: ["iconSelected"],
+        iconsUrl: baseUrl,
+      };
+      const custom1 = {
+        rootElement: "#searchContainer",
+        url: baseUrl + "?FRAME_NAME=CADTREE.HIERARCHY.JSON&CADCODE=",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        label: ["name"],
+        icons: ["icon", "statusIcon"],
+        changeIcons: ["iconSelected"],
+        iconsUrl: baseUrl,
+      };
+      const custom2 = {
+        rootElement: "#containterIframe",
+        url: baseUrl + "?FRAME_NAME=CADTREE.RIGHT_PAGES.JSON&ID=",
+        method: "GET",
+      };
+
+      const vMainClass = new mainClass(custom);
+      const vSearchClass = new SearchClass(custom1);
+      const vCadTreeClass = new CadTreeClass(custom2);
+
+      vCadTreeClass.inject({
+        rootElement: custom2.rootElement,
+        url: "http://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.RIGHT_PAGES.JSON&ID=",
+      });
+    </script>
+    <script src="ModalSetting.js"></script>
   </body>
 </html>
