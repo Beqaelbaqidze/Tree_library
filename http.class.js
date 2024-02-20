@@ -29,6 +29,8 @@ export class HttpClass {
         })
         .catch((error) => {
           reject(error);
+
+          
         });
     });
   }

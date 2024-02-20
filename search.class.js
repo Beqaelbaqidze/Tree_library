@@ -48,7 +48,6 @@ export class SearchClass {
   // icon = [];
   // chIcon = [];
   url;
-  #searchInProgress = false;
 
   constructor(options) {
     this.options = options;

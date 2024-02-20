@@ -1,17 +1,17 @@
 import { HttpClass } from "./http.class.js";
 
 export class mainClass {
-  htmlULTpl = (id, value, icons, changeIcons) => {
-    return `<li class="node nodeTreeLi" data-id="${id}">
-    <div class="nodeContainerParent" data-id="${id}">
-    <button data-id="${id}" class="nodebtn btnTree"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="5" height="10" viewBox="0 0 5 10" fill="none">
+  htmlULTpl = (id, value, icons, changeIcons, textTitle) => {
+    return `<li class="node nodeTreeLi" data-id="${id}" data-text="${textTitle}">
+    <div class="nodeContainerParent" data-id="${id}" data-text="${textTitle}">
+    <button data-id="${id}" data-text="${textTitle}" class="nodebtn btnTree"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="5" height="10" viewBox="0 0 5 10" fill="none">
       <path d="M4.29289 5L0.5 8.79289V1.20711L4.29289 5Z" fill="#1C1B1F" stroke="black"/>
     </svg></button>
-    <div class="nodeContainer" data-id="${id}">
+    <div class="nodeContainer" data-id="${id}" data-text="${textTitle}">
       
       ${changeIcons}
       ${icons}
-      <p class="nodeText" data-id="${id}">${value}</p>
+      <p class="nodeText" data-id="${id}" data-text="${textTitle}">${value}</p>
       </div>
       </div>
       <ul class="children hidden nodeTreeUl"></ul>
@@ -145,7 +145,7 @@ export class mainClass {
         .join("");
 
       const hasChildren = item.children && item.children.length > 0;
-      vHTML += this.htmlULTpl(item.id, labels, icons, chngIcons);
+      vHTML += this.htmlULTpl(item.id, labels, icons, chngIcons, item.text);
 
       if (hasChildren) {
         vHTML += this.buildHTML(item.children);
@@ -157,12 +157,16 @@ export class mainClass {
   selectObj(event) {
     const target = event.target;
     const vTr = target.getAttribute("data-id");
+    const vTrText = target.getAttribute("data-text");
+    const titleElement = document.querySelector("title");
+
     const secondIcons = document.querySelectorAll(
       `.${this.changeIcons}[data-id='${vTr}']`
     );
     const sameIcons = document.querySelectorAll(
       `.${this.icons[0]}[data-id='${vTr}']`
     );
+
     if (
       target.classList.contains("nodeText") ||
       target.classList.contains("nodeContainer")
@@ -184,6 +188,8 @@ export class mainClass {
       secondIcons.forEach((icon) => icon.classList.remove("none"));
       sameIcons.forEach((icon) => icon.classList.add("none"));
       target.closest(".nodeContainer").classList.add("selected");
+      document.getElementById("searchInput").value = vTrText;
+      titleElement.innerHTML = `${vTrText}`;
     }
   }
 

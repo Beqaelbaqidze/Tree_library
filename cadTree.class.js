@@ -2,12 +2,13 @@
 import { HttpClass } from "./http.class.js";
 
 export class CadTreeClass {
-  htmlTitleTpl = (id, pageName, pageTitle) => {
-    return `<h4 class="pagesTitle ${pageName}" data-id="${id}" data-text="${pageName}">${pageTitle}</h4>`;
+  htmlTitleTpl = (id, pageName, pageTitle, pUrl) => {
+    return `<h4 class="pagesTitle ${pageName}" data-id="${id}" data-text="${pageName}" data-url="${pUrl}">${pageTitle}</h4>`;
   };
 
   htmlCardTpl = (id, pageName, pageHtml) => {
-    return `<iframe class="pagesHtml none" data-text="${pageName}" data-id="${id}" src="${pageHtml}">`;
+    return `
+<iframe class="pagesHtml" data-text="${pageName}" data-id="${id}" src="${pageHtml}">`;
   };
   #httpClient;
   itemPage;
@@ -67,23 +68,18 @@ export class CadTreeClass {
   async appendResponseToContainer(response, id) {
     const apTitleOfPage = document.querySelector(".titleOfPage");
     apTitleOfPage.innerHTML = "";
-    const apforLink = document.querySelector(".forLink");
-    apforLink.innerHTML = "";
 
     if (apTitleOfPage) {
       try {
         const promises = response.map(async (item) => {
-          const pageUrlHtml = item.pageUrl;
-          console.log(pageUrlHtml);
           const titleHtml = this.htmlTitleTpl(
             id,
             item.pageName,
-            item.pageTitle
+            item.pageTitle,
+            item.pageUrl
           );
-          const cardHtml = this.htmlCardTpl(id, item.pageName, pageUrlHtml);
 
           apTitleOfPage.innerHTML += titleHtml;
-          apforLink.innerHTML += cardHtml;
 
           if (item.pageName === this.selectedTitle) {
             const selectedElements = document.querySelectorAll(
@@ -94,8 +90,6 @@ export class CadTreeClass {
               element.classList.remove("none");
             });
           }
-
-          return pageUrlHtml;
         });
 
         await Promise.all(promises);
@@ -105,32 +99,40 @@ export class CadTreeClass {
     }
   }
 
+  
+  
+  
+  
+  
   selectTitle(event) {
+    const apforLink = document.querySelector(".forLink");
+    apforLink.innerHTML = "";
     const target = event.target;
-    const vTr = target.getAttribute("data-text");
+    const tText = target.getAttribute("data-text");
+    const tId = target.getAttribute("data-id");
+    const tUrl = target.getAttribute("data-url");
 
     if (target.classList.contains("pagesTitle")) {
-      console.log("selectTitle method called for data-text:", vTr);
       const selectedElements = document.querySelectorAll(
-        `.pagesHtml[data-text="${vTr}"]`
+        `.pagesHtml[data-text="${tText}"]`
       );
+
+      const cardHtml = this.htmlCardTpl(tId, tText, tUrl);
+      apforLink.innerHTML = cardHtml;
       document.querySelectorAll(".pagesTitle").forEach((element) => {
         element.classList.remove("selecTitle");
       });
       target.classList.add("selecTitle");
-      const allNodeTitleDiv = document.querySelectorAll(".pagesHtml");
+      // const allNodeTitleDiv = document.querySelectorAll(".pagesHtml");
 
-      allNodeTitleDiv.forEach((elem) => {
-        elem.classList.add("none");
-      });
+      // allNodeTitleDiv.forEach((elem) => {
+      //   elem.classList.add("none");
+      // });
 
-      console.log("Number of selected elements:", selectedElements.length);
-
-      selectedElements.forEach((element) => {
-        element.classList.remove("none");
-      });
-
-      this.selectedTitle = vTr;
+      // selectedElements.forEach((element) => {
+      //   element.classList.remove("none");
+      // });
+      this.selectedTitle = tText;
     }
 
     // document
