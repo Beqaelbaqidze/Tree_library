@@ -8,7 +8,7 @@ export class CadTreeClass {
 
   htmlCardTpl = (id, pageName, pageHtml) => {
     return `
-<iframe class="pagesHtml" data-text="${pageName}" data-id="${id}" src="${pageHtml}">`;
+<iframe class="pagesHtml" id="pagesHtml" data-text="${pageName}" data-id="${id}" src="${pageHtml}">`;
   };
   #httpClient;
   itemPage;
@@ -99,11 +99,6 @@ export class CadTreeClass {
     }
   }
 
-  
-  
-  
-  
-  
   selectTitle(event) {
     const apforLink = document.querySelector(".forLink");
     apforLink.innerHTML = "";

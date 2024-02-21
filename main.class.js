@@ -128,7 +128,7 @@ export class mainClass {
         .map(
           (
             chngIcons
-          ) => `<svg class= "none nodeChangeSvg ${chngIcons}" data-id="${item.id}" style="width: 18px; margin-right: 8px;height: 18px; xmlns="http://www.w3.org/2000/svg">
+          ) => `<svg class= "none nodeChangeSvg ${chngIcons}" data-id="${item.id}" style="width: 18px; margin-right: 8px;height: 18px; z-index: -1; xmlns="http://www.w3.org/2000/svg">
       <image href="${this.iconsUrl}${item[chngIcons]}" class="nodeIcon ${chngIcons}" data-id="${item.id}" style="width: 18px; height: 18px; cursor: pointer;" />
       </svg>`
         )
@@ -138,7 +138,7 @@ export class mainClass {
         .map(
           (
             icons
-          ) => `<svg class= "${icons} nodeSvg" data-id="${item.id}" style="width: 18px; margin-right: 8px;height: 18px; xmlns="http://www.w3.org/2000/svg">
+          ) => `<svg class= "${icons} nodeSvg" data-id="${item.id}" style="width: 18px; margin-right: 8px;height: 18px; z-index: -1;xmlns="http://www.w3.org/2000/svg">
       <image href="${this.iconsUrl}${item[icons]}" class="nodeIcon ${icons}" data-id="${item.id}" style="width: 18px; height: 18px; cursor: pointer;" />
       </svg>`
         )
@@ -154,7 +154,7 @@ export class mainClass {
     vHTML += "</ul>";
     return vHTML;
   }
-  selectObj(event) {
+  async selectObj(event) {
     const target = event.target;
     const vTr = target.getAttribute("data-id");
     const vTrText = target.getAttribute("data-text");
@@ -190,6 +190,22 @@ export class mainClass {
       target.closest(".nodeContainer").classList.add("selected");
       document.getElementById("searchInput").value = vTrText;
       titleElement.innerHTML = `${vTrText}`;
+
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      document.querySelectorAll(".pagesTitle.selecTitle").forEach((elem) => {
+        elem.click();
+      });
+
+      if (window.innerWidth < 1440) {
+        setTimeout(() => {
+          const customContainer = document.querySelector(".customContainer");
+          if (customContainer) {
+            customContainer.classList.remove("showTree");
+            customContainer.classList.add("hideTree");
+          }
+        }, 300);
+      }
     }
   }
 

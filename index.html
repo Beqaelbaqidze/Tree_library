@@ -76,29 +76,40 @@
       });
 
       //For Iframe function
-      const iframe = document.getElementById("pagesHtml");
-      const backButton = document.getElementById("backButton");
-      const reloadButton = document.getElementById("reloadButton");
-      const forwardButton = document.getElementById("forwardButton");
+      document.addEventListener("DOMContentLoaded", function () {
+        const backButton = document.getElementById("backButton");
+        const reloadButton = document.getElementById("reloadButton");
+        const forwardButton = document.getElementById("forwardButton");
 
-      backButton.addEventListener("click", goBack);
-      reloadButton.addEventListener("click", reload);
-      forwardButton.addEventListener("click", goForward);
+        backButton.addEventListener("click", goBack);
+        reloadButton.addEventListener("click", reload);
+        forwardButton.addEventListener("click", goForward);
 
-      function goBack(event) {
-        event.preventDefault();
-        iframe.contentWindow.history.back();
-      }
+        function goBack(event) {
+          event.preventDefault();
+          const iframe = document.getElementById("pagesHtml");
+          console.log(iframe);
+          if (iframe.contentWindow) {
+            iframe.contentWindow.history.back();
+          }
+        }
 
-      function reload(event) {
-        event.preventDefault();
-        iframe.contentWindow.location.reload();
-      }
+        function reload(event) {
+          event.preventDefault();
+          const iframe = document.getElementById("pagesHtml");
+          if (iframe.contentWindow) {
+            iframe.contentWindow.location.reload();
+          }
+        }
 
-      function goForward(event) {
-        event.preventDefault();
-        iframe.contentWindow.history.forward();
-      }
+        function goForward(event) {
+          event.preventDefault();
+          const iframe = document.getElementById("pagesHtml");
+          if (iframe.contentWindow) {
+            iframe.contentWindow.history.forward();
+          }
+        }
+      });
     </script>
     <script src="ModalSetting.js"></script>
   </body>
