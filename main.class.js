@@ -46,7 +46,6 @@ export class mainClass {
       if (window.innerWidth > 1440) {
         customContainer.classList.remove("hideTree");
         document.getElementById("slidebtn").classList.add("hidden");
-        document.querySelector(".searchBtn").classList.add("hidden");
       }
     }
     // const container = document.querySelector(selector);
