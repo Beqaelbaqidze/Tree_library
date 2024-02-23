@@ -1,12 +1,16 @@
 import { HttpClass } from "./http.class.js";
 
 export class mainClass {
-  htmlULTpl = (id, value, icons, changeIcons, textTitle) => {
+  htmlULTpl = (id, value, icons, changeIcons, textTitle, hasChildren) => {
     return `<li class="node nodeTreeLi" data-id="${id}" data-text="${textTitle}">
     <div class="nodeContainerParent" data-id="${id}" data-text="${textTitle}">
-    <button data-id="${id}" data-text="${textTitle}" class="nodebtn btnTree"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="5" height="10" viewBox="0 0 5 10" fill="none">
+    <button data-id="${id}" data-text="${textTitle}" class="nodebtn btnTree ${
+      hasChildren ? "" : "hideArrow"
+    }"><svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="5" height="10" viewBox="0 0 5 10" fill="none">
       <path d="M4.29289 5L0.5 8.79289V1.20711L4.29289 5Z" fill="#1C1B1F" stroke="black"/>
     </svg></button>
+
+  
     <div class="nodeContainer" data-id="${id}" data-text="${textTitle}">
       
       ${changeIcons}
@@ -146,7 +150,14 @@ export class mainClass {
         .join("");
 
       const hasChildren = item.children && item.children.length > 0;
-      vHTML += this.htmlULTpl(item.id, labels, icons, chngIcons, item.text);
+      vHTML += this.htmlULTpl(
+        item.id,
+        labels,
+        icons,
+        chngIcons,
+        item.text,
+        item.hasChildren
+      );
 
       if (hasChildren) {
         vHTML += this.buildHTML(item.children);
@@ -218,6 +229,10 @@ export class mainClass {
       target.classList.contains("arrow")
     ) {
       event.preventDefault();
+
+      // Change cursor to 'wait' while fetching
+      document.body.style.cursor = "wait";
+
       const parent = target.closest(".node");
       const pBtn = target.closest(".nodebtn");
       const children = parent.querySelector(".children");
@@ -249,6 +264,9 @@ export class mainClass {
         "hidden",
         !children.classList.contains("hidden")
       );
+
+      // Revert cursor back to default after fetch request completes
+      document.body.style.cursor = "default";
     }
   }
 }
