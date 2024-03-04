@@ -118,39 +118,8 @@ export class CadTreeClass {
         element.classList.remove("selecTitle");
       });
       target.classList.add("selecTitle");
-      // const allNodeTitleDiv = document.querySelectorAll(".pagesHtml");
 
-      // allNodeTitleDiv.forEach((elem) => {
-      //   elem.classList.add("none");
-      // });
-
-      // selectedElements.forEach((element) => {
-      //   element.classList.remove("none");
-      // });
       this.selectedTitle = tText;
     }
-
-    // document
-    //   .querySelector(".containterIframe")
-    //   .addEventListener("contextmenu", this.openNewWindow.bind(this));
   }
-
-  // openNewWindow(event) {
-  //   event.preventDefault();
-
-  //   const target = event.target;
-  //   const vTr = target.getAttribute("data-text");
-
-  //   if (target.classList.contains("pagesTitle")) {
-  //     console.log("selectTitle method called for data-text:", vTr);
-  //     const selectedElements = document.querySelectorAll(
-  //       `.pagesHtml[data-text="${vTr}"]`
-  //     );
-  //     const newWindow = window.open("about:blank", "_blank");
-  //     newWindow.document.write(
-  //       `<html><head><title>${vTr}</title></head><body>${selectedElements[0].innerHTML}</body></html>`
-  //     );
-  //     newWindow.document.close();
-  //   }
-  // }
 }

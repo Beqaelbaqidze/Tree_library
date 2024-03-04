@@ -72,7 +72,7 @@ export class SearchClass {
         <p class="nodeText" data-id="${id}">${value}</p>
         </div>
         </div>
-        <ul class="children nodeTreeUl"></ul>
+        <ul class="children nodeTreeUl" data-id="${id}"></ul>
       </li>
     `;
   };
@@ -105,6 +105,11 @@ export class SearchClass {
     searchBtn.addEventListener("click", () =>
       this.searchAndAppendNodes(searchInput.value, this.url)
     );
+    searchInput.addEventListener("keypress", (event) => {
+      if (event.key === ".") {
+        this.searchAndAppendNodes(searchInput.value, this.url);
+      }
+    });
     searchInput.addEventListener("keypress", (event) => {
       if (event.key === "Enter") {
         this.searchAndAppendNodes(searchInput.value, this.url);
@@ -250,10 +255,6 @@ export class SearchClass {
                   });
                 });
 
-                // parentNodeButton.addEventListener("click", (event) => {
-                //   console.log("Parent button clicked!");
-                // });
-
                 if (targetButton) {
                   targetButton.innerHTML = "-";
                 }
@@ -281,13 +282,16 @@ export class SearchClass {
   async searchAndClickByParentId(parentId) {
     try {
       const matchingNodes = this.findNodesByDataId(parentId);
+      console.log("matchingNodes", matchingNodes[0]);
 
       if (matchingNodes.length > 0) {
-        const targetButton = matchingNodes[0].querySelector(".nodebtn");
+        const targetButton = matchingNodes[0].querySelectorAll(".nodebtn");
 
         if (targetButton) {
           matchingNodes.innerHTML = "";
-          targetButton.click();
+          targetButton.forEach((elem) => {
+            elem.click();
+          });
         } else {
           console.error(`Button not found in node with parent ID: ${parentId}`);
         }
@@ -315,54 +319,3 @@ export class SearchClass {
     }
   }
 }
-
-// htmlULTpl = (id, parentId, value) => {
-//   const liElement = document.createElement("li");
-//   liElement.className = "node nodeTreeLi";
-//   liElement.setAttribute("data-id", id);
-
-//   const parentNodeButton = document.createElement("button");
-//   parentNodeButton.setAttribute("data-parent-id", parentId);
-
-//   parentNodeButton.className = "parentNode btnTree";
-//   parentNodeButton.textContent = "...";
-
-//   const childButton = document.createElement("button");
-//   childButton.setAttribute("data-id", id);
-//   childButton.setAttribute("data-parent-id", parentId);
-//   childButton.className = "btnTree nodebtn rotated";
-//   childButton.textContent = "";
-
-//   const pNode = document.createElement("p");
-//   pNode.className = "nodeText";
-//   pNode.textContent = value;
-
-//   const ulElement = document.createElement("ul");
-//   // ulElement.style.display = "block";
-//   ulElement.className = "children nodeTreeUl";
-
-//   liElement.appendChild(parentNodeButton);
-//   liElement.appendChild(childButton);
-//   liElement.appendChild(pNode);
-//   liElement.appendChild(ulElement);
-
-//   return liElement.outerHTML;
-// };
-
-// const iconsHTML = this.icons
-//   .map(
-//     (
-//       icons
-//     ) => `<svg class= "${icons}" style="width: 18px; margin-right: 8px;height: 18px;" xmlns="http://www.w3.org/2000/svg">
-//   <image href="${this.iconsUrl}/${response.nodes[i][label]}" class="nodeIcon" style="width: 18px; height: 18px; cursor: pointer;" />
-// </svg>`
-//   )
-//   .join("");
-
-// async searchAndClickByParentId(parentId) {
-//   try {
-//     await this.traverseAndClickByParentId(document.body, parentId);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }

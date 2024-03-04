@@ -18,7 +18,7 @@ export class mainClass {
       <p class="nodeText" data-id="${id}" data-text="${textTitle}">${value}</p>
       </div>
       </div>
-      <ul class="children hidden nodeTreeUl"></ul>
+      <ul class="children hidden nodeTreeUl" data-id="${id}"></ul>
       
     </li>`;
   };
