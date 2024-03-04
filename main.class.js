@@ -18,7 +18,7 @@ export class mainClass {
       <p class="nodeText" data-id="${id}" data-text="${textTitle}">${value}</p>
       </div>
       </div>
-      <ul class="children hidden nodeTreeUl" data-id="${id}"></ul>
+      <ul class="children nodeTreeUl" data-id="${id}"></ul>
       
     </li>`;
   };
@@ -40,21 +40,17 @@ export class mainClass {
 
   inject(options, data) {
     const { rootElement } = options;
-    const assembledHTML = `<div class="customContainer hideTree">${this.buildHTML(
+    const assembledHTML = `<svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M300-640v320l160-160-160-160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm440-80h120v-560H640v560Zm-80 0v-560H200v560h360Zm80 0h120-120Z"/></svg><div class="customContainer">${this.buildHTML(
       data
     )}</div>`;
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const customContainer = document.querySelector(".customContainer");
-    if (customContainer) {
-      if (window.innerWidth > 1440) {
-        customContainer.classList.remove("hideTree");
-        document.getElementById("slidebtn").classList.add("hidden");
+    document.querySelector(".slidTree").addEventListener("click", () => {
+      customContainer.classList.toggle("hideTree");
+      if (customContainer.classList.contains("hideTree")) {
       }
-    }
-    // const container = document.querySelector(selector);
-    // container.addEventListener("click", this.handleButtonClick.bind(this));
-    // container.addEventListener("click", this.selectObj.bind(this));
+    });
     this.bindEvents();
   }
 
@@ -259,11 +255,11 @@ export class mainClass {
       } else {
         pBtn.classList.toggle("rotated");
       }
-
-      children.classList.toggle(
-        "hidden",
-        !children.classList.contains("hidden")
-      );
+      if (!pBtn.classList.contains("rotated")) {
+        children.classList.toggle("hidden");
+      } else {
+        children.classList.remove("hidden");
+      }
 
       // Revert cursor back to default after fetch request completes
       document.body.style.cursor = "default";

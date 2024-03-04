@@ -7,7 +7,11 @@ export class CadTreeClass {
   };
 
   htmlCardTpl = (id, pageName, pageHtml) => {
-    return `
+    return `<div class="button-container">
+    <button id="backButton">Back</button>
+    <button id="reloadButton">Reload</button>
+    <button id="forwardButton">Forward</button>
+  </div>
 <iframe class="pagesHtml" id="pagesHtml" data-text="${pageName}" data-id="${id}" src="${pageHtml}">`;
   };
   #httpClient;
@@ -100,14 +104,14 @@ export class CadTreeClass {
   }
 
   selectTitle(event) {
-    const apforLink = document.querySelector(".forLink");
-    apforLink.innerHTML = "";
     const target = event.target;
     const tText = target.getAttribute("data-text");
     const tId = target.getAttribute("data-id");
     const tUrl = target.getAttribute("data-url");
 
     if (target.classList.contains("pagesTitle")) {
+      const apforLink = document.querySelector(".forLink");
+      apforLink.innerHTML = "";
       const selectedElements = document.querySelectorAll(
         `.pagesHtml[data-text="${tText}"]`
       );
@@ -120,6 +124,26 @@ export class CadTreeClass {
       target.classList.add("selecTitle");
 
       this.selectedTitle = tText;
+    }
+    const backButton = document.getElementById("backButton");
+    const reloadButton = document.getElementById("reloadButton");
+    const forwardButton = document.getElementById("forwardButton");
+
+    backButton.addEventListener("click", goBack);
+    reloadButton.addEventListener("click", reload);
+    forwardButton.addEventListener("click", goForward);
+
+    function goBack() {
+      window.history.back();
+    }
+
+    function reload() {
+      const ifr = document.getElementById("pagesHtml");
+      ifr.src = ifr.src;
+    }
+
+    function goForward() {
+      window.history.forward();
     }
   }
 }

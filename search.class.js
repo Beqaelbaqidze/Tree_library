@@ -1,16 +1,7 @@
 import { HttpClass } from "./http.class.js";
 
 export class SearchClass {
-  htmlinput =
-    `<button class="slidebtn" id="slidebtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <mask id="mask0_39_1169" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-    <rect width="24" height="24" fill="#D9D9D9"/>
-  </mask>
-  <g mask="url(#mask0_39_1169)">
-    <path d="M15.5 20.5V17.5H11.5V7.5H8.5V10.5H2.5V3.5H8.5V6.5H15.5V3.5H21.5V10.5H15.5V7.5H12.5V16.5H15.5V13.5H21.5V20.5H15.5ZM16.5 9.5H20.5V4.5H16.5V9.5ZM16.5 19.5H20.5V14.5H16.5V19.5ZM3.5 9.5H7.5V4.5H3.5V9.5Z" fill="white"/>
-  </g>
-</svg></button>` +
-    `<input type="text" class="searchinput" id="searchInput" placeholder="ძებნა..." /><button class="searchBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  htmlinput = `<input type="text" class="searchinput" id="searchInput" placeholder="ძებნა..." /><button class="searchBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
   <mask id="mask0_39_1150" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
     <rect width="24" height="24" fill="#525252"/>
   </mask>
@@ -281,8 +272,9 @@ export class SearchClass {
 
   async searchAndClickByParentId(parentId) {
     try {
-      const matchingNodes = this.findNodesByDataId(parentId);
-      console.log("matchingNodes", matchingNodes[0]);
+      let matchingNodes = this.findNodesByDataId(parentId);
+
+      console.log("matching", matchingNodes);
 
       if (matchingNodes.length > 0) {
         const targetButton = matchingNodes[0].querySelectorAll(".nodebtn");
@@ -292,6 +284,15 @@ export class SearchClass {
           targetButton.forEach((elem) => {
             elem.click();
           });
+          console.log(
+            "includes",
+            matchingNodes[11].classList.contains("hidden")
+          );
+          if (matchingNodes[11].classList.contains("hidden")) {
+            //remove it
+            matchingNodes[11].classList.remove("hidden");
+          }
+          console.log("else", matchingNodes[11].classList);
         } else {
           console.error(`Button not found in node with parent ID: ${parentId}`);
         }

@@ -251,10 +251,7 @@ table {
   border-radius: 8px;
 }
 .button-container {
-  position: absolute;
   display: flex;
-  margin-top: 64px;
-  z-index: 1;
 }
 
 .button-container button {
@@ -275,10 +272,15 @@ table {
   background-color: #6c9eee; /* Change background color on hover */
   color: #fff; /* Change text color on hover */
 }
+.slidTree {
+  position: absolute;
+  left: 0;
+  cursor: pointer;
+}
 
 @media (min-width: 1440px) {
   .button-container {
-    margin-left: 360px;
+    z-index: 1;
   }
   .customContainer {
     position: relative;
@@ -287,13 +289,13 @@ table {
     left: 0;
     overflow-y: scroll;
     height: calc(100vh - 150px);
+    margin-right: 12px;
   }
   .section {
     display: flex;
   }
   .containterIframe {
     z-index: 0;
-    margin-left: 12px;
   }
 }
 .close {
@@ -399,8 +401,10 @@ table {
   background: #2c4cc9;
 }
 .hideTree {
-  transition: 0.2s;
+  transition: all 0.5s ease-in;
+  display: none;
   visibility: hidden;
+  transform-origin: right;
 }
 .hideArrow {
   visibility: hidden;
