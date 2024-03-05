@@ -133,6 +133,7 @@ table {
 }
 
 .searchBtn {
+  cursor: pointer;
   margin-left: 16px;
   border: 0;
   border-radius: 4px;
