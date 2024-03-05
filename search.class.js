@@ -120,7 +120,6 @@ export class SearchClass {
       const response = await this.#httpClient.request({ url: searchUrl });
       document.getElementById("searchInput").style.color = "black";
 
-      console.log(response.id);
       if (response.id == -1) {
         document.getElementById("searchInput").style.color = "red";
       } else {
@@ -155,6 +154,7 @@ export class SearchClass {
 
                 if (isSelected) {
                   const selectedElement = document.querySelector(".selected");
+
                   const offset = selectedElement.getBoundingClientRect().top;
                   window.scrollBy({
                     top: offset - 30,
@@ -173,7 +173,7 @@ export class SearchClass {
               const previousNode = this.findNodesById(response.nodes[i - 1].id);
               const previousTargetUl =
                 previousNode[0]?.querySelector(".children");
-
+              console.log(previousTargetUl);
               if (previousTargetUl) {
                 let changeIconsHTML = "";
                 this.changeIcons.forEach((chIcon, index) => {
@@ -210,6 +210,7 @@ export class SearchClass {
                     const selectedElement = document.querySelector(
                       `.${selectedClass}`
                     );
+                    console.log(selectedElement);
                     if (selectedElement) {
                       selectedElement.click();
                     } else {
@@ -274,8 +275,6 @@ export class SearchClass {
     try {
       let matchingNodes = this.findNodesByDataId(parentId);
 
-      console.log("matching", matchingNodes);
-
       if (matchingNodes.length > 0) {
         const targetButton = matchingNodes[0].querySelectorAll(".nodebtn");
 
@@ -284,15 +283,10 @@ export class SearchClass {
           targetButton.forEach((elem) => {
             elem.click();
           });
-          console.log(
-            "includes",
-            matchingNodes[11].classList.contains("hidden")
-          );
           if (matchingNodes[11].classList.contains("hidden")) {
             //remove it
             matchingNodes[11].classList.remove("hidden");
           }
-          console.log("else", matchingNodes[11].classList);
         } else {
           console.error(`Button not found in node with parent ID: ${parentId}`);
         }

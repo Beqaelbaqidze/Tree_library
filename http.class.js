@@ -25,7 +25,6 @@ export class HttpClass {
         })
         .then((value) => {
           resolve(value);
-          console.log(value);
         })
         .catch((error) => {
           reject(error);

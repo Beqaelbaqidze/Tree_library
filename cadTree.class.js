@@ -32,18 +32,17 @@ export class CadTreeClass {
     const selector = rootElement || "body";
     mainContainer.innerHTML = assembledHTML;
     this.url = options.url;
-    console.log(this.url);
+
     container.addEventListener("click", this.handleContainerClick.bind(this));
     mainContainer.addEventListener("click", this.selectTitle.bind(this));
   }
   async handleContainerClick(event) {
-    console.log(this.url);
     if (
       document.querySelector(".nodeText") ||
       document.querySelector(".nodeContainer")
     ) {
       const nodeText = event.target.closest(".nodeContainer");
-      console.log(nodeText);
+
       if (nodeText) {
         await this.extractItemIdFromNodeText(nodeText, this.url);
       }
@@ -57,7 +56,6 @@ export class CadTreeClass {
 
     try {
       const response = await this.#httpClient.request({ url: divUrl });
-      console.log(response.pages);
       await this.appendResponseToContainer(response.pages, itemId);
       const selectedTitleElements = document.querySelectorAll(
         `.pagesTitle[data-text="${this.selectedTitle}"]`
