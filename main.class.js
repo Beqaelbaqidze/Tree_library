@@ -40,19 +40,14 @@ export class mainClass {
 
   inject(options, data) {
     const { rootElement } = options;
-    const assembledHTML = `<button class="sideBarShow none"></button><div class="customContainer"><div class="treeButtons"><svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"/></svg></div>${this.buildHTML(
+    const assembledHTML = `<div class="customContainer"><div class="treeButtons"><svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m680-280-56-56 103-104H520v-80h207L624-624l56-56 200 200-200 200Zm-400 0L80-480l200-200 56 56-103 104h207v80H233l103 104-56 56Z"/></svg></div>${this.buildHTML(
       data
     )}</div>`;
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const customContainer = document.querySelector(".customContainer");
     document.querySelector(".slidTree").addEventListener("click", () => {
-      customContainer.classList.add("hideTree");
-      document.querySelector(".sideBarShow").classList.remove("none");
-    });
-    document.querySelector(".sideBarShow").addEventListener("click", () => {
-      customContainer.classList.remove("hideTree");
-      document.querySelector(".sideBarShow").classList.add("none");
+      customContainer.classList.toggle("hideSideTree");
     });
     this.bindEvents();
   }
@@ -208,15 +203,15 @@ export class mainClass {
         elem.click();
       });
 
-      if (window.innerWidth < 1440) {
-        setTimeout(() => {
-          const customContainer = document.querySelector(".customContainer");
-          if (customContainer) {
-            customContainer.classList.remove("showTree");
-            customContainer.classList.add("hideTree");
-          }
-        }, 300);
-      }
+      // if (window.innerWidth < 1440) {
+      //   setTimeout(() => {
+      //     const customContainer = document.querySelector(".customContainer");
+      //     if (customContainer) {
+      //       customContainer.classList.remove("showTree");
+      //       customContainer.classList.add("hideTree");
+      //     }
+      //   }, 300);
+      // }
     }
   }
 

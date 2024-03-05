@@ -144,7 +144,7 @@ table {
   flex-shrink: 0;
 }
 .mainDivContainer {
-  padding: 24px 36px;
+  padding: 24px;
   height: 100%;
   background: #fafafa;
 }
@@ -195,7 +195,8 @@ table {
   cursor: pointer;
 }
 .containterIframe {
-  width: 100%;
+  margin-left: 48px;
+  width: calc(100% - 48px);
   z-index: -1;
 }
 .titleOfPage {
@@ -275,9 +276,9 @@ table {
 
 .treeButtons {
   display: flex;
-  justify-content: end;
-  align-items: center;
-  border-bottom: 0.5px solid gray;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
   padding: 4px 0;
 }
 .slidTree {
@@ -347,6 +348,7 @@ table {
     display: flex;
   }
   .containterIframe {
+    margin: 0;
     z-index: 0;
   }
 }
@@ -464,4 +466,11 @@ table {
 .rotateSideBtn {
   transform: rotate(180deg);
   transition: transform 0.5s ease-in-out;
+}
+.hideSideTree {
+  width: 24px;
+  overflow: hidden;
+}
+.hideSideTree ul {
+  display: none;
 }
