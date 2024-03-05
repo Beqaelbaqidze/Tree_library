@@ -40,16 +40,19 @@ export class mainClass {
 
   inject(options, data) {
     const { rootElement } = options;
-    const assembledHTML = `<svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M300-640v320l160-160-160-160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm440-80h120v-560H640v560Zm-80 0v-560H200v560h360Zm80 0h120-120Z"/></svg><div class="customContainer">${this.buildHTML(
+    const assembledHTML = `<button class="sideBarShow none"></button><div class="customContainer"><div class="treeButtons"><svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"/></svg></div>${this.buildHTML(
       data
     )}</div>`;
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const customContainer = document.querySelector(".customContainer");
     document.querySelector(".slidTree").addEventListener("click", () => {
-      customContainer.classList.toggle("hideTree");
-      if (customContainer.classList.contains("hideTree")) {
-      }
+      customContainer.classList.add("hideTree");
+      document.querySelector(".sideBarShow").classList.remove("none");
+    });
+    document.querySelector(".sideBarShow").addEventListener("click", () => {
+      customContainer.classList.remove("hideTree");
+      document.querySelector(".sideBarShow").classList.add("none");
     });
     this.bindEvents();
   }
