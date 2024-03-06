@@ -40,7 +40,20 @@ export class mainClass {
 
   inject(options, data) {
     const { rootElement } = options;
-    const assembledHTML = `<div class="customContainer"><div class="treeButtons"><svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m680-280-56-56 103-104H520v-80h207L624-624l56-56 200 200-200 200Zm-400 0L80-480l200-200 56 56-103 104h207v80H233l103 104-56 56Z"/></svg></div>${this.buildHTML(
+    const assembledHTML = `<div class="customContainer" id="customContainer"><div class="treeButtons">
+    <svg
+      class="treeReload"
+      id="treeReload"
+      xmlns="http://www.w3.org/2000/svg"
+      height="24"
+      viewBox="0 -960 960 960"
+      width="24"
+    >
+      <path
+        d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"
+      />
+    </svg>
+    <svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m680-280-56-56 103-104H520v-80h207L624-624l56-56 200 200-200 200Zm-400 0L80-480l200-200 56 56-103 104h207v80H233l103 104-56 56Z"/></svg></div>${this.buildHTML(
       data
     )}</div>`;
     const selector = rootElement || "body";
@@ -48,7 +61,10 @@ export class mainClass {
     const customContainer = document.querySelector(".customContainer");
     document.querySelector(".slidTree").addEventListener("click", () => {
       customContainer.classList.toggle("hideSideTree");
+      document.querySelector(".treeReload").classList.toggle("none");
+      document.querySelector(".treeButtons").classList.toggle("changePosition");
     });
+
     this.bindEvents();
   }
 
@@ -119,7 +135,7 @@ export class mainClass {
   }
 
   buildHTML(data) {
-    let vHTML = `<ul>`;
+    let vHTML = `<ul class="mainNode">`;
 
     for (const item of data) {
       const labels = this.label.map((label) => item[label]).join(", ");

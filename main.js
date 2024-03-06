@@ -41,3 +41,4 @@ vCadTreeClass.inject({
   rootElement: custom2.rootElement,
   url: "http://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree?FRAME_NAME=CADTREE.RIGHT_PAGES.JSON&ID=",
 });
+

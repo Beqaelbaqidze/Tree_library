@@ -96,11 +96,12 @@ export class SearchClass {
     searchBtn.addEventListener("click", () =>
       this.searchAndAppendNodes(searchInput.value, this.url)
     );
-    searchInput.addEventListener("keypress", (event) => {
-      if (event.key === ".") {
-        this.searchAndAppendNodes(searchInput.value, this.url);
-      }
-    });
+    // searchInput.addEventListener("keypress", (event) => {
+    //   if (event.key === ".") {
+    //     this.searchAndAppendNodes(searchInput.value, this.url);
+    //   }
+    // });
+
     searchInput.addEventListener("keypress", (event) => {
       if (event.key === "Enter") {
         this.searchAndAppendNodes(searchInput.value, this.url);
@@ -128,6 +129,7 @@ export class SearchClass {
           const targetButton = matchingNodes[0]?.querySelector(".nodebtn");
           const targetUl = matchingNodes[0]?.querySelector(".children");
           const targetp = matchingNodes[0]?.querySelector(".nodeContainer");
+          const isLastNode = i === response.nodes.length - 1;
 
           if (matchingNodes.length > 0) {
             if (targetButton) {
@@ -135,6 +137,9 @@ export class SearchClass {
               selectedElements.forEach((element) => {
                 element.classList.remove("selected");
               });
+              if (isLastNode) {
+                targetp.click();
+              }
               targetButton.scrollIntoView({
                 behavior: "smooth",
                 block: "start",
@@ -144,14 +149,16 @@ export class SearchClass {
 
                 setTimeout(() => {
                   targetUl.classList.remove("highlight");
-                }, 1000);
+                }, 300);
 
                 targetUl.classList.remove("hidden");
 
                 targetButton.classList.add("rotated");
 
                 const isSelected = targetp.classList.contains("selected");
-
+                if (isLastNode) {
+                  targetp.querySelector(".nodeContainer").click();
+                }
                 if (isSelected) {
                   const selectedElement = document.querySelector(".selected");
 
@@ -166,7 +173,7 @@ export class SearchClass {
                     behavior: "smooth",
                   });
                 }
-              }, 500);
+              }, 300);
             }
           } else {
             if (i > 0) {
@@ -246,10 +253,6 @@ export class SearchClass {
                     });
                   });
                 });
-
-                if (targetButton) {
-                  targetButton.innerHTML = "-";
-                }
               }
             }
           }
@@ -290,6 +293,7 @@ export class SearchClass {
         } else {
           console.error(`Button not found in node with parent ID: ${parentId}`);
         }
+        document.querySelector(".searchBtn").click();
       } else {
         console.error(`Node with ID ${parentId} not found.`);
       }
@@ -313,4 +317,19 @@ export class SearchClass {
       }
     }
   }
+  // selectAfter() {
+  //   console.log(document.getElementById("searchinput").value);
+  //   if (
+  //     document.querySelector(".nodeContainer").getAttribute("data-text") ===
+  //     document.getElementById("searchinput").value
+  //   ) {
+  //     document
+  //       .querySelector(
+  //         `.nodeContainer[data-text]=${
+  //           document.getElementById("searchinput").value
+  //         }`
+  //       )
+  //       .click();
+  //   }
+  // }
 }
