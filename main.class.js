@@ -37,19 +37,19 @@ export class mainClass {
       this.inject(options, data);
     });
   }
-
+  //   <svg class="clearSelection"
+  //   id="clearSelection"
+  //   xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+  // <path fill="none" stroke="#000000" stroke-width="2" d="M10,4 C10,2.8954305 10.8954305,2 12,2 C13.1045695,2 14,2.8954305 14,4 L14,10 L20,10 L20,14 L4,14 L4,10 L10,10 L10,4 Z M4,14 L20,14 L20,22 L12,22 L4,22 L4,14 Z M16,22 L16,16.3646005 M8,22 L8,16.3646005 M12,22 L12,16.3646005"/>
+  // <title>
+  // მონიშნული მონაცემების გაუქმება</title>
+  // <text class="tooltiptext">
+  // მონიშვნის გაუქმება</text>
+  // </svg>
   inject(options, data) {
     const { rootElement } = options;
     const assembledHTML = `<div class="customContainer" id="customContainer"><div class="treeButtons">
-    <svg class="clearSelection"
-    id="clearSelection"
-    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-  <path fill="none" stroke="#000000" stroke-width="2" d="M10,4 C10,2.8954305 10.8954305,2 12,2 C13.1045695,2 14,2.8954305 14,4 L14,10 L20,10 L20,14 L4,14 L4,10 L10,10 L10,4 Z M4,14 L20,14 L20,22 L12,22 L4,22 L4,14 Z M16,22 L16,16.3646005 M8,22 L8,16.3646005 M12,22 L12,16.3646005"/>
-  <title>
-  მონიშნული მონაცემების გაუქმება</title>
-  <text class="tooltiptext">
-  მონიშვნის გაუქმება</text>
-  </svg>
+   
     <svg
       class="treeReload"
       id="treeReload"
@@ -78,7 +78,6 @@ export class mainClass {
     document.querySelector(".slidTree").addEventListener("click", () => {
       customContainer.classList.toggle("hideSideTree");
       document.querySelector(".treeReload").classList.toggle("none");
-      document.querySelector(".clearSelection").classList.toggle("none");
 
       document.querySelector(".treeButtons").classList.toggle("changePosition");
       document.querySelector(".treeButtons").style.marginLeft = "-12px";
@@ -94,7 +93,6 @@ export class mainClass {
 
     container.addEventListener("click", this.handleButtonClick.bind(this));
     container.addEventListener("click", this.selectObj.bind(this));
-    container.addEventListener("contextmenu", this.selectObj.bind(this));
 
     container.addEventListener(
       "contextmenu",
@@ -103,9 +101,6 @@ export class mainClass {
     document
       .querySelector(".treeReload")
       .addEventListener("click", this.reloadNode.bind(this));
-    document
-      .querySelector(".clearSelection")
-      .addEventListener("click", this.clearSelection.bind(this));
   }
   handleContextMenu(event) {
     const existingContextMenu = document.querySelector(".contextMenu");
@@ -116,6 +111,33 @@ export class mainClass {
     const target = event.target.closest(".nodeContainer");
     if (target) {
       event.preventDefault();
+      const vTr = target.getAttribute("data-id");
+      const vTrText = target.getAttribute("data-text");
+
+      const secondIcons = document.querySelectorAll(
+        `.${this.changeIcons}[data-id='${vTr}']`
+      );
+      const sameIcons = document.querySelectorAll(
+        `.${this.icons[0]}[data-id='${vTr}']`
+      );
+      const allNodeTextElements = document.querySelectorAll(".nodeContainer");
+      const allChngIconElements = document.querySelectorAll(
+        `.${this.changeIcons}`
+      );
+      const allIconElements = document.querySelectorAll(`.${this.icons}`);
+      allChngIconElements.forEach((elem) => {
+        elem.classList.add("none");
+      });
+      allIconElements.forEach((elemn) => {
+        elemn.classList.remove("none");
+      });
+      allNodeTextElements.forEach((element) => {
+        element.classList.remove("selected");
+      });
+      secondIcons.forEach((icon) => icon.classList.remove("none"));
+      sameIcons.forEach((icon) => icon.classList.add("none"));
+      target.closest(".nodeContainer").classList.add("selected");
+      document.getElementById("searchInput").value = vTrText;
       const contextMenu = document.createElement("div");
       contextMenu.classList.add("contextMenu");
       contextMenu.innerHTML = `
@@ -248,26 +270,7 @@ export class mainClass {
       // }
     }
   }
-  clearSelection() {
-    const allNodeTextElements = document.querySelectorAll(".nodeContainer");
-    const allChngIconElements = document.querySelectorAll(
-      `.${this.changeIcons}`
-    );
-    const allIconElements = document.querySelectorAll(`.${this.icons}`);
-    allChngIconElements.forEach((elem) => {
-      elem.classList.add("none");
-    });
-    allIconElements.forEach((elemn) => {
-      elemn.classList.remove("none");
-    });
-    allNodeTextElements.forEach((element) => {
-      element.classList.remove("selected");
-    });
-    document.querySelectorAll(".pagesTitle").forEach((element) => {
-      element.classList.remove("selecTitle");
-    });
-    document.querySelector(".forLink").innerHTML = "";
-  }
+
   async handleButtonClick(event) {
     const target = event.target;
 
