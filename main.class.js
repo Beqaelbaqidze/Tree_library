@@ -37,15 +37,19 @@ export class mainClass {
       this.inject(options, data);
     });
   }
-  //   <svg class="clearSelection"
-  //   id="clearSelection"
-  //   xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-  // <path fill="none" stroke="#000000" stroke-width="2" d="M10,4 C10,2.8954305 10.8954305,2 12,2 C13.1045695,2 14,2.8954305 14,4 L14,10 L20,10 L20,14 L4,14 L4,10 L10,10 L10,4 Z M4,14 L20,14 L20,22 L12,22 L4,22 L4,14 Z M16,22 L16,16.3646005 M8,22 L8,16.3646005 M12,22 L12,16.3646005"/>
-  // </svg>
+
   inject(options, data) {
     const { rootElement } = options;
     const assembledHTML = `<div class="customContainer" id="customContainer"><div class="treeButtons">
-   
+    <svg class="clearSelection"
+    id="clearSelection"
+    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+  <path fill="none" stroke="#000000" stroke-width="2" d="M10,4 C10,2.8954305 10.8954305,2 12,2 C13.1045695,2 14,2.8954305 14,4 L14,10 L20,10 L20,14 L4,14 L4,10 L10,10 L10,4 Z M4,14 L20,14 L20,22 L12,22 L4,22 L4,14 Z M16,22 L16,16.3646005 M8,22 L8,16.3646005 M12,22 L12,16.3646005"/>
+  <title>
+  მონიშნული მონაცემების გაუქმება</title>
+  <text class="tooltiptext">
+  მონიშვნის გაუქმება</text>
+  </svg>
     <svg
       class="treeReload"
       id="treeReload"
@@ -57,17 +61,27 @@ export class mainClass {
       <path
         d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"
       />
+      <title>
+  მონიშნული მონაცემის განახლება</title>
+  <text class="tooltiptext">
+  მონიშნული მონაცემის განახლება</text>
     </svg>
-    <svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m680-280-56-56 103-104H520v-80h207L624-624l56-56 200 200-200 200Zm-400 0L80-480l200-200 56 56-103 104h207v80H233l103 104-56 56Z"/></svg></div>${this.buildHTML(
-      data
-    )}</div>`;
+    <svg class="slidTree" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m680-280-56-56 103-104H520v-80h207L624-624l56-56 200 200-200 200Zm-400 0L80-480l200-200 56 56-103 104h207v80H233l103 104-56 56Z"/>
+    <title>
+  დახურვა</title>
+  <text class="tooltiptext">
+  დახურვა</text>
+    </svg></div>${this.buildHTML(data)}</div>`;
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
     const customContainer = document.querySelector(".customContainer");
     document.querySelector(".slidTree").addEventListener("click", () => {
       customContainer.classList.toggle("hideSideTree");
       document.querySelector(".treeReload").classList.toggle("none");
+      document.querySelector(".clearSelection").classList.toggle("none");
+
       document.querySelector(".treeButtons").classList.toggle("changePosition");
+      document.querySelector(".treeButtons").style.marginLeft = "-12px";
     });
 
     this.bindEvents();
@@ -89,6 +103,9 @@ export class mainClass {
     document
       .querySelector(".treeReload")
       .addEventListener("click", this.reloadNode.bind(this));
+    document
+      .querySelector(".clearSelection")
+      .addEventListener("click", this.clearSelection.bind(this));
   }
   handleContextMenu(event) {
     const existingContextMenu = document.querySelector(".contextMenu");
@@ -190,7 +207,6 @@ export class mainClass {
     const sameIcons = document.querySelectorAll(
       `.${this.icons[0]}[data-id='${vTr}']`
     );
-
     if (
       target.classList.contains("nodeText") ||
       target.classList.contains("nodeContainer")
@@ -232,7 +248,26 @@ export class mainClass {
       // }
     }
   }
-
+  clearSelection() {
+    const allNodeTextElements = document.querySelectorAll(".nodeContainer");
+    const allChngIconElements = document.querySelectorAll(
+      `.${this.changeIcons}`
+    );
+    const allIconElements = document.querySelectorAll(`.${this.icons}`);
+    allChngIconElements.forEach((elem) => {
+      elem.classList.add("none");
+    });
+    allIconElements.forEach((elemn) => {
+      elemn.classList.remove("none");
+    });
+    allNodeTextElements.forEach((element) => {
+      element.classList.remove("selected");
+    });
+    document.querySelectorAll(".pagesTitle").forEach((element) => {
+      element.classList.remove("selecTitle");
+    });
+    document.querySelector(".forLink").innerHTML = "";
+  }
   async handleButtonClick(event) {
     const target = event.target;
 
