@@ -191,10 +191,19 @@ table {
   cursor: pointer;
 }
 .btnTree {
+  padding: 8px;
   display: flex;
   background-color: inherit;
   border: 0;
   cursor: pointer;
+  z-index: 1;
+}
+.arrow {
+  z-index: -1;
+}
+svg.disabled {
+  opacity: 0.5; /* Example: reduce opacity to make it look disabled */
+  pointer-events: none; /* Prevent interaction */
 }
 .containterIframe {
   margin-left: 48px;

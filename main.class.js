@@ -37,10 +37,15 @@ export class mainClass {
       this.inject(options, data);
     });
   }
-
+  //   <svg class="clearSelection"
+  //   id="clearSelection"
+  //   xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+  // <path fill="none" stroke="#000000" stroke-width="2" d="M10,4 C10,2.8954305 10.8954305,2 12,2 C13.1045695,2 14,2.8954305 14,4 L14,10 L20,10 L20,14 L4,14 L4,10 L10,10 L10,4 Z M4,14 L20,14 L20,22 L12,22 L4,22 L4,14 Z M16,22 L16,16.3646005 M8,22 L8,16.3646005 M12,22 L12,16.3646005"/>
+  // </svg>
   inject(options, data) {
     const { rootElement } = options;
     const assembledHTML = `<div class="customContainer" id="customContainer"><div class="treeButtons">
+   
     <svg
       class="treeReload"
       id="treeReload"
@@ -75,14 +80,15 @@ export class mainClass {
 
     container.addEventListener("click", this.handleButtonClick.bind(this));
     container.addEventListener("click", this.selectObj.bind(this));
+    container.addEventListener("contextmenu", this.selectObj.bind(this));
 
-    const nodeContainers = document.querySelectorAll(".nodeContainer");
-    nodeContainers.forEach((container) => {
-      container.addEventListener(
-        "contextmenu",
-        this.handleContextMenu.bind(this)
-      );
-    });
+    container.addEventListener(
+      "contextmenu",
+      this.handleContextMenu.bind(this)
+    );
+    document
+      .querySelector(".treeReload")
+      .addEventListener("click", this.reloadNode.bind(this));
   }
   handleContextMenu(event) {
     const existingContextMenu = document.querySelector(".contextMenu");
@@ -93,13 +99,11 @@ export class mainClass {
     const target = event.target.closest(".nodeContainer");
     if (target) {
       event.preventDefault();
-
       const contextMenu = document.createElement("div");
       contextMenu.classList.add("contextMenu");
       contextMenu.innerHTML = `
             <ul>
-                <li>Edit</li>
-                <li>Delete</li>
+                <li>Reload</li>
             </ul>
         `;
 
@@ -118,11 +122,8 @@ export class mainClass {
         option.addEventListener("click", () => {
           const action = option.innerText.toLowerCase();
           switch (action) {
-            case "edit":
-              alert("edit");
-              break;
-            case "delete":
-              alert("delete");
+            case "reload":
+              this.reloadNode();
               break;
             default:
               break;
@@ -178,6 +179,7 @@ export class mainClass {
   }
   async selectObj(event) {
     const target = event.target;
+
     const vTr = target.getAttribute("data-id");
     const vTrText = target.getAttribute("data-text");
     const titleElement = document.querySelector("title");
@@ -277,6 +279,42 @@ export class mainClass {
 
       // Revert cursor back to default after fetch request completes
       document.body.style.cursor = "default";
+    }
+  }
+  reloadNode() {
+    let foundSelected = false;
+
+    document.querySelectorAll(".nodeContainer").forEach((elem) => {
+      if (elem.classList.contains("selected")) {
+        elem.closest(".nodeTreeLi").querySelector(".nodeTreeUl").innerHTML = "";
+        elem
+          .closest(".nodeTreeLi")
+          .querySelector(".nodeTreeUl")
+          .classList.remove("loaded");
+        elem
+          .closest(".nodeTreeLi")
+          .querySelector(".nodebtn")
+          .classList.remove("rotated");
+        console.log(elem.closest(".nodeTreeLi").querySelector(".nodeTreeUl"));
+        foundSelected = true;
+      }
+    });
+    if (!foundSelected) {
+      if (confirm("გსურთ ყველა მონაცემის განახლება?")) {
+        document.querySelectorAll(".nodeContainer").forEach((elem) => {
+          elem.closest(".nodeTreeLi").querySelector(".nodeTreeUl").innerHTML =
+            "";
+          elem
+            .closest(".nodeTreeLi")
+            .querySelector(".nodeTreeUl")
+            .classList.remove("loaded");
+          elem
+            .closest(".nodeTreeLi")
+            .querySelector(".nodebtn")
+            .classList.remove("rotated");
+          console.log(elem.closest(".nodeTreeLi").querySelector(".nodeTreeUl"));
+        });
+      }
     }
   }
 }
