@@ -333,7 +333,7 @@ export class mainClass {
           .closest(".nodeTreeLi")
           .querySelector(".nodebtn")
           .classList.remove("rotated");
-        console.log(elem.closest(".nodeTreeLi").querySelector(".nodeTreeUl"));
+
         foundSelected = true;
       }
     });
@@ -350,7 +350,6 @@ export class mainClass {
             .closest(".nodeTreeLi")
             .querySelector(".nodebtn")
             .classList.remove("rotated");
-          console.log(elem.closest(".nodeTreeLi").querySelector(".nodeTreeUl"));
         });
       }
     }
