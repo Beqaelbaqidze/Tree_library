@@ -134,46 +134,25 @@ export class SearchClass {
           if (matchingNodes.length > 0) {
             if (targetButton) {
               const selectedElements = document.querySelectorAll(".selected");
+              this.forScroll(targetp);
               selectedElements.forEach((element) => {
                 element.classList.remove("selected");
               });
               if (isLastNode) {
                 targetp.click();
               }
-              targetButton.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-              setTimeout(() => {
-                targetUl.classList.add("highlight");
 
-                setTimeout(() => {
-                  targetUl.classList.remove("highlight");
-                }, 300);
+              targetUl.classList.remove("hidden");
 
-                targetUl.classList.remove("hidden");
+              targetButton.classList.add("rotated");
 
-                targetButton.classList.add("rotated");
-
-                const isSelected = targetp.classList.contains("selected");
-                if (isLastNode) {
-                  targetp.querySelector(".nodeContainer").click();
-                }
-                if (isSelected) {
-                  const selectedElement = document.querySelector(".selected");
-
-                  const offset = selectedElement.getBoundingClientRect().top;
-                  window.scrollBy({
-                    top: offset - 30,
-                    behavior: "smooth",
-                  });
-                } else {
-                  window.scrollBy({
-                    top: -30,
-                    behavior: "smooth",
-                  });
-                }
-              }, 300);
+              const isSelected = targetp.classList.contains("selected");
+              if (isLastNode) {
+                targetp.querySelector(".nodeContainer").click();
+              }
+              if (isSelected) {
+                const selectedElement = document.querySelector(".selected");
+              }
             }
           } else {
             if (i > 0) {
@@ -226,7 +205,7 @@ export class SearchClass {
                       );
                     }
                   }
-                }, 1100);
+                }, 300);
                 new Promise((resolve, reject) => {
                   const nodeHTML = this.htmlULTpl(
                     response.nodes[i].id,
@@ -264,7 +243,12 @@ export class SearchClass {
       document.body.style.cursor = "default";
     }
   }
-
+  forScroll(selecTtarget) {
+    selecTtarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
   findNodesByParentId(parentId) {
     const selector = `[data-parent-id="${parentId}"]`;
     return document.querySelectorAll(selector);

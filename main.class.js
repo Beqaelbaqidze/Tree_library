@@ -74,6 +74,7 @@ export class mainClass {
     </svg></div>${this.buildHTML(data)}</div>`;
     const selector = rootElement || "body";
     document.querySelector(selector).innerHTML = assembledHTML;
+
     const customContainer = document.querySelector(".customContainer");
     document.querySelector(".slidTree").addEventListener("click", () => {
       customContainer.classList.toggle("hideSideTree");
